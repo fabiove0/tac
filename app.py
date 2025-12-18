@@ -51,8 +51,7 @@ else:
     lista_final = [x for x in lista_empilhada if x != '' and x == escolha_status]
 
   # Criando colunas no Streamlit para colocar gráfico e tabela lado a lado
-  col1, col2 = st.columns([1, 4])
-  with col1:
+
     contagem = pd.Series(lista_final).value_counts()
     total_geral = len(lista_final)
 
@@ -60,7 +59,7 @@ else:
     def fazer_rotulo (pct):
       resultado= int(round(total_geral/ 100.0 * pct))
       return f"{pct:.1f}%\n({resultado} itens)"
-    fig, ax = plt.subplots(figsize=(3, 3))          # 1. Cria a base
+    fig, ax = plt.subplots(figsize=(2, 2))          # 1. Cria a base
     ax.pie(
           contagem.values,             # Os números
           labels=contagem.index,       # As legendas (Concluído, etc)
@@ -71,10 +70,8 @@ else:
 
     # Título Dinâmico (Muda conforme o filtro)
     ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
-    st.pyplot(fig)                                 # 3. Entrega pro Streamlit
+    st.sidebar.pyplot(fig)                                 # 3. Entrega pro Streamlit
 
-    
-  with col2:
-      st.write("### Prévia dos Dados")
-      # Mostra a tabela de forma interativa
-      st.table(tabela_visual)
+    st.write("### Prévia dos Dados")
+    # Mostra a tabela de forma interativa
+    st.table(tabela_visual)
