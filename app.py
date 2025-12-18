@@ -42,7 +42,7 @@ else:
   # organização da tabela:
   tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
   # preparação do gráfico:
-  colunas_status = tabela_visual[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
+  colunas_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
   lista_empilhada = colunas_status.stack()
 
   if escolha_status == 'Todos':
