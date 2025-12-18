@@ -15,9 +15,7 @@ df_tratado = df.fillna('')
 lista_tacs = ['Todos'] + sorted(df_tratado['DOCUMENTO'].unique().tolist())
 lista_status = ['Todos']+ sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().tolist())
 
-st.sidebar.header("Filtros")
-escolha_tac = st.sidebar.selectbox("Selecione o Documento:", lista_tacs)
-escolha_status = st.sidebar.selectbox("Selecione o Status:", lista_status)
+
 
 # 4. Filtragem
 tabela_para_exibir = df_tratado.copy()
