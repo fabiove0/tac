@@ -50,31 +50,28 @@ else:
   else:
     lista_final = [x for x in lista_empilhada if x != '' and x == escolha_status]
 
-  # Criando colunas no Streamlit para colocar gráfico e tabela lado a lado
-  col1, col2 = st.columns([1, 2])
-  with col1:
-    contagem = pd.Series(lista_final).value_counts()
-    total_geral = len(lista_final)
 
-    # Desenha a Pizza
-    def fazer_rotulo (pct):
-      resultado= int(round(total_geral/ 100.0 * pct))
-      return f"{pct:.1f}%\n({resultado} itens)"
-    fig, ax = plt.subplots()                      # 1. Cria a base
-    ax.pie(
-          contagem.values,             # Os números
-          labels=contagem.index,       # As legendas (Concluído, etc)
-          autopct=fazer_rotulo,        # A porcentagem escrita
-          startangle=140,              # Gira a pizza
-          colors=plt.cm.Paired.colors  # Uma paleta de cores bonita do Matplotlib
-        )                                         # 2. Desenha nela
+  contagem = pd.Series(lista_final).value_counts()
+  total_geral = len(lista_final)
 
-    # Título Dinâmico (Muda conforme o filtro)
-    ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
-    st.pyplot(fig)                                 # 3. Entrega pro Streamlit
+  # Desenha a Pizza
+  def fazer_rotulo (pct):
+    resultado= int(round(total_geral/ 100.0 * pct))
+    return f"{pct:.1f}%\n({resultado} itens)"
+  fig, ax = plt.subplots()                      # 1. Cria a base
+  ax.pie(
+        contagem.values,             # Os números
+        labels=contagem.index,       # As legendas (Concluído, etc)
+        autopct=fazer_rotulo,        # A porcentagem escrita
+        startangle=140,              # Gira a pizza
+        colors=plt.cm.Paired.colors  # Uma paleta de cores bonita do Matplotlib
+      )                                         # 2. Desenha nela
 
-    
-  with col2:
-      st.write("### Prévia dos Dados")
-      # Mostra a tabela de forma interativa
-      st.table(tabela_visual)
+  # Título Dinâmico (Muda conforme o filtro)
+  ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
+  st.pyplot(fig)                                 # 3. Entrega pro Streamlit
+
+  
+  st.write("### Prévia dos Dados")
+  # Mostra a tabela de forma interativa
+  st.table(tabela_visual)
