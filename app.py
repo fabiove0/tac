@@ -60,7 +60,7 @@ else:
   col_esq, col_centro, col_dir = st.columns([1, 1, 1]) 
   
   with col_centro:
-    fig, ax = plt.subplots(figsize=(3, 3))                      # 1. Cria a base
+    fig, ax = plt.subplots(figsize=(2, 2))                      # 1. Cria a base
     ax.pie(
         contagem.values,             # Os números
         labels=contagem.index,       # As legendas (Concluído, etc)
@@ -73,39 +73,23 @@ else:
     ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
     st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
-    # Injeta CSS para diminuir a fonte da tabela
-    st.markdown("""
-        <style>
-        div[data-testid="stDataFrame"] td, div[data-testid="stDataFrame"] th {
-            font-size: 11px !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-    
-    # organização da tabela:
-    tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
-    st.dataframe(
-        tabela_visual,
-        use_container_width=True,  # Ocupa toda a largura da tela
-        height="auto",               # MOSTRA A TABELA INTEIRA (sem barra de rolagem vertical)
-        column_config={
-                "ANO": st.column_config.TextColumn("Ano", width="small"),
-                "DOCUMENTO": st.column_config.TextColumn("Tac", width="small"),
-                "CLAUSULA": st.column_config.TextColumn("Cláusula", width="medium"),
-                "COMPROMISSO_DA_CLAUSULA": st.column_config.TextColumn("Compromisso (Cláusula)", width="large"),
-                "STATUS_DA_CLAUSULA": st.column_config.TextColumn("Status (Cláusula)", width="small"),
-                "OBS_SEJUS_CLAUSULA": st.column_config.TextColumn("Obs. SEJUS (Cláusula)", width="medium"),
-                "INCISO": st.column_config.TextColumn("Inciso", width="medium"),
-                "COMPROMISSO_INCISO": st.column_config.TextColumn("Compromisso (Inciso)", width="large"),
-                "STATUS_DO_INCISO": st.column_config.TextColumn("Status (Inciso)", width="small"),
-                "OBS_SEJUS_INCISO": st.column_config.TextColumn("Obs. SEJUS (Inciso)", width="medium"),
-                "ALINEA": st.column_config.TextColumn("Alínea", width="medium"),
-                "COMPROMISSO_DA_ALINEA": st.column_config.TextColumn("Compromisso (Alínea)", width="large"),
-                "STATUS_DA_ALINEA": st.column_config.TextColumn("Status (Alínea)", width="small"),
-                "OBS_SEJUS_ALINEA": st.column_config.TextColumn("Obs. SEJUS (Alínea)", width="medium"),
-            }
-    )
+  # Injeta CSS para diminuir a fonte da tabela
+  st.markdown("""
+          <style>
+          table {
+              font-size: 9px !important;
+              font-family: sans-serif;
+          }
+          th {
+              background-color: #f0f2f6 !important;
+          }
+          </style>
+          """, unsafe_allow_html=True)
   
-    st.write("### Prévia dos Dados")
-    # Mostra a tabela de forma interativa
-    st.table(tabela_visual)
+  # organização da tabela:
+  tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
+
+
+  st.write("### Prévia dos Dados")
+  # Mostra a tabela de forma interativa
+  st.table(tabela_visual)
