@@ -83,7 +83,7 @@ else:
         """, unsafe_allow_html=True)
     
     # organização da tabela:
-    tabela_visual = *abela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
+    tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
     st.dataframe(
         tabela_visual,
         use_container_width=True,  # Ocupa toda a largura da tela
