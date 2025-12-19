@@ -81,3 +81,7 @@ else:
     
     # st.table mostra TUDO na tela sem barra de rolagem interna
     st.table(tabela_visual)
+    tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO', 'CLAUSULA'])
+    
+    # st.table mostra TUDO na tela sem barra de rolagem interna
+    st.table(tabela_visual)
