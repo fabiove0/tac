@@ -2,103 +2,82 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
-
-# 1. Título da Página
+# 1. Configuração da Página (Sempre no topo)
 st.set_page_config(page_title="Monitoramento de TACs", layout="wide")
-st.title("📊 Painel de Monitoramento de TACs")
 
-# 2. Carregameno e tratamento dos dados
+# 2. Título e CSS para diminuir a fonte da tabela
+st.title("📊 Painel de Monitoramento de TACs")
+st.markdown("""
+    <style>
+    /* Estilização para deixar a tabela compacta e legível */
+    table {
+        font-size: 10px !important;
+        width: 100%;
+    }
+    th {
+        background-color: #262730 !important;
+        color: white !important;
+    }
+    td {
+        border: 1px solid #4a4a4a !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# 3. Carregamento dos dados
 url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzKqLRK17FmBUbOCv_DzHUqqXpSNJu8sfp2WNAHLfTBaUA0Eeq2WRSO9czpcfysEVfVCHtEsHkSygA/pub?gid=0&single=true&output=csv'
 df = pd.read_csv(url)
 df_tratado = df.fillna('')
 
-#  3. Criação das entradas
-
-#reunindo opções de alternantes
+# 4. Filtros na Barra Lateral
 lista_tacs = ['Todos'] + sorted(df_tratado['DOCUMENTO'].unique().tolist())
 lista_status = ['Todos']+ sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().tolist())
 
-#recebimento de entradas
 st.sidebar.header("Filtros")
 escolha_tac = st.sidebar.selectbox("Selecione o Documento:", lista_tacs)
 escolha_status = st.sidebar.selectbox("Selecione o Status:", lista_status)
 
-# 4. Filtragem
+# 5. Lógica de Filtragem
 tabela_para_exibir = df_tratado.copy()
 
 if escolha_tac != 'Todos':
-  tabela_para_exibir = tabela_para_exibir[tabela_para_exibir['DOCUMENTO'] == escolha_tac]
+    tabela_para_exibir = tabela_para_exibir[tabela_para_exibir['DOCUMENTO'] == escolha_tac]
 
 if escolha_status != 'Todos':
-  clausula_tem = tabela_para_exibir['STATUS_DA_CLAUSULA'] == escolha_status
-  inciso_tem = tabela_para_exibir['STATUS_DO_INCISO'] == escolha_status
-  alinea_tem = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status
-  tabela_para_exibir = tabela_para_exibir[clausula_tem | inciso_tem | alinea_tem]
+    c = tabela_para_exibir['STATUS_DA_CLAUSULA'] == escolha_status
+    i = tabela_para_exibir['STATUS_DO_INCISO'] == escolha_status
+    a = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status
+    tabela_para_exibir = tabela_para_exibir[c | i | a]
 
-# vizualização dos resultados
+# 6. Exibição dos Resultados
 if len(tabela_para_exibir) == 0:
-  st.warning("Nenhum dado encontrado com esse filtro.")
+    st.warning("Nenhum dado encontrado.")
 else:
-  # preparação do gráfico:
-  colunas_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
-  lista_empilhada = colunas_status.stack()
-
-  if escolha_status == 'Todos':
+    # Preparação para o Gráfico
+    colunas_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
+    lista_empilhada = colunas_status.stack()
     lista_final = [x for x in lista_empilhada if x != '']
-  else:
-    lista_final = [x for x in lista_empilhada if x != '' and x == escolha_status]
+    
+    if escolha_status != 'Todos':
+        lista_final = [x for x in lista_final if x == escolha_status]
 
+    # --- TOPO: Gráfico Pequeno e Centralizado ---
+    col_esq, col_centro, col_dir = st.columns([1, 1, 1])
+    with col_centro:
+        if len(lista_final) > 0:
+            contagem = pd.Series(lista_final).value_counts()
+            fig, ax = plt.subplots(figsize=(2, 2)) # Tamanho fixo pequeno
+            ax.pie(contagem.values, labels=contagem.index, autopct='%1.1f%%', 
+                   startangle=140, textprops={'fontsize': 6})
+            fig.patch.set_facecolor('none') # Fundo transparente para o gráfico
+            st.pyplot(fig, use_container_width=False)
 
-  contagem = pd.Series(lista_final).value_counts()
-  total_geral = len(lista_final)
-
-  # Desenha a Pizza
-  def fazer_rotulo (pct):
-    resultado= int(round(total_geral/ 100.0 * pct))
-    return f"{pct:.1f}%\n({resultado} itens)"
-  # Criamos 3 colunas: as das pontas vazias servem apenas para "empurrar" a do meio
-  col_esq, col_centro, col_dir = st.columns([1, 1, 1]) 
-  
-  with col_centro:
-    fig, ax = plt.subplots(figsize=(2, 2))                      # 1. Cria a base
-    ax.pie(
-        contagem.values,             # Os números
-        labels=contagem.index,       # As legendas (Concluído, etc)
-        autopct=fazer_rotulo,        # A porcentagem escrita
-        startangle=140,              # Gira a pizza
-        colors=plt.cm.Paired.colors, # Uma paleta de cores
-        textprops={'fontsize': 5}    # <--- ADICIONE ESTA LINHA (tente 8, 7 ou 6)
-    )
-    # Título Dinâmico (Muda conforme o filtro)
-    ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
-    st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
-
-# 1. CSS REFORÇADO (Para evitar o problema do "tudo branco")
-  st.markdown("""
-      <style>
-      /* Força a cor da tabela para o Modo Escuro */
-      table {
-          font-size: 10px !important;
-          color: white !important; 
-          background-color: #0e1117 !important; /* Fundo escuro padrão */
-          width: 100%;
-      }
-      th {
-          background-color: #262730 !important; /* Cabeçalho cinza escuro */
-          color: white !important;
-          text-align: left !important;
-      }
-      td {
-          color: #dcdcdc !important; /* Texto cinza claro para as células */
-          border: 1px solid #4a4a4a !important;
-      }
-      </style>
-      """, unsafe_allow_html=True)
-  
-  # organização da tabela:
-  tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
-
-
-  st.write("### Prévia dos Dados")
-  # Mostra a tabela de forma interativa
-  st.table(tabela_visual)
+    # --- BAIXO: Tabela Inteira ---
+    st.write("### 📋 Relatório de Compromissos")
+    
+    # Criamos o agrupamento pelo índice (Ano, Doc, Cláusula)
+    # Isso fará com que o st.table mescle as células iguais automaticamente
+    tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO', 'CLAUSULA'])
+    
+    # st.table mostra TUDO na tela sem barra de rolagem interna
+    st.table(tabela_visual)
