@@ -69,16 +69,16 @@ else:
     fig, ax = plt.subplots()                      # 1. Cria a base
     fig, ax = plt.subplots(figsize=(3, 3))                      # 1. Cria a base
     ax.pie(
-          contagem.values,             # Os números
-          labels=contagem.index,       # As legendas (Concluído, etc)
-          autopct=fazer_rotulo,        # A porcentagem escrita
-          startangle=140,              # Gira a pizza
-          colors=plt.cm.Paired.colors  # Uma paleta de cores bonita do Matplotlib
-        )                                         # 2. Desenha nela
-
+        contagem.values,             # Os números
+        labels=contagem.index,       # As legendas (Concluído, etc)
+        autopct=fazer_rotulo,        # A porcentagem escrita
+        startangle=140,              # Gira a pizza
+        colors=plt.cm.Paired.colors, # Uma paleta de cores
+        textprops={'fontsize': 8}    # <--- ADICIONE ESTA LINHA (tente 8, 7 ou 6)
+    )
     # Título Dinâmico (Muda conforme o filtro)
     ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
-    st.pyplot(fig,, use_container_width=False)                                 # 3. Entrega pro Streamlit
+    st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
   
   st.write("### Prévia dos Dados")
