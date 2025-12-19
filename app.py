@@ -58,19 +58,27 @@ else:
   def fazer_rotulo (pct):
     resultado= int(round(total_geral/ 100.0 * pct))
     return f"{pct:.1f}%\n({resultado} itens)"
-  fig, ax = plt.subplots()                      # 1. Cria a base
-  fig, ax = plt.subplots(figsize=(3, 3))                      # 1. Cria a base
-  ax.pie(
-        contagem.values,             # Os números
-        labels=contagem.index,       # As legendas (Concluído, etc)
-        autopct=fazer_rotulo,        # A porcentagem escrita
-        startangle=140,              # Gira a pizza
-        colors=plt.cm.Paired.colors  # Uma paleta de cores bonita do Matplotlib
-      )                                         # 2. Desenha nela
+  # Criamos 3 colunas: as das pontas vazias servem apenas para "empurrar" a do meio
+  col_esq, col_centro, col_dir = st.columns([1, 1, 1]) 
+  
+  with col_centro:
+    # O gráfico vai ficar limitado apenas ao tamanho desta coluna central
+    fig, ax = plt.subplots(figsize=(3, 3))
+    ax.pie(contagem.values, labels=contagem.index, autopct=fazer_rotulo, startangle=140)
+    st.pyplot(fig)
+    fig, ax = plt.subplots()                      # 1. Cria a base
+    fig, ax = plt.subplots(figsize=(3, 3))                      # 1. Cria a base
+    ax.pie(
+          contagem.values,             # Os números
+          labels=contagem.index,       # As legendas (Concluído, etc)
+          autopct=fazer_rotulo,        # A porcentagem escrita
+          startangle=140,              # Gira a pizza
+          colors=plt.cm.Paired.colors  # Uma paleta de cores bonita do Matplotlib
+        )                                         # 2. Desenha nela
 
-  # Título Dinâmico (Muda conforme o filtro)
-  ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
-  st.pyplot(fig)                                 # 3. Entrega pro Streamlit
+    # Título Dinâmico (Muda conforme o filtro)
+    ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
+    st.pyplot(fig,, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
   
   st.write("### Prévia dos Dados")
