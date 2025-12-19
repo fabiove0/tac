@@ -87,7 +87,7 @@ else:
     st.dataframe(
         tabela_visual,
         use_container_width=True,  # Ocupa toda a largura da tela
-        height=None,               # MOSTRA A TABELA INTEIRA (sem barra de rolagem vertical)
+        height="auto",               # MOSTRA A TABELA INTEIRA (sem barra de rolagem vertical)
         column_config={
                 "ANO": st.column_config.TextColumn("Ano", width="small"),
                 "DOCUMENTO": st.column_config.TextColumn("Tac", width="small"),
