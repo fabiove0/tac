@@ -59,7 +59,7 @@ else:
     resultado= int(round(total_geral/ 100.0 * pct))
     return f"{pct:.1f}%\n({resultado} itens)"
   fig, ax = plt.subplots()                      # 1. Cria a base
-  fig, ax = plt.subplots(figsize(3, 3))                      # 1. Cria a base
+  fig, ax = plt.subplots(figsize=(3, 3))                      # 1. Cria a base
   ax.pie(
         contagem.values,             # Os números
         labels=contagem.index,       # As legendas (Concluído, etc)
