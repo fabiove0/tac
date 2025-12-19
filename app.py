@@ -74,34 +74,34 @@ else:
     st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
 # 1. CSS REFORÇADO (Para evitar o problema do "tudo branco")
-   st.markdown("""
-          <style>
-          table {
-              font-size: 9px !important;
-              color: #000000 !important; /* Força texto preto */
-              background-color: #ffffff !important; /* Força fundo branco */
-              width: 100%;
-              border-collapse: collapse;
-          }
-          th {
-              background-color: #262730 !important; /* Cabeçalho escuro */
-              color: #ffffff !important; /* Texto do cabeçalho branco */
-              padding: 4px !important;
-          }
-          td {
-              padding: 4px !important;
-              border: 1px solid #cccccc !important;
-              vertical-align: top !important;
-          }
-          /* Estilo para as colunas do Índice (as que agrupam) */
-          .index_name, .level0, .level1, .level2, .level3, .level4, .level5 {
-              background-color: #f9f9f9 !important;
-              font-weight: bold !important;
-              color: #333333 !important;
-          }
-          </style>
-          """, unsafe_allow_html=True)
-    
+ st.markdown("""
+        <style>
+        table {
+            font-size: 9px !important;
+            color: #000000 !important; /* Força texto preto */
+            background-color: #ffffff !important; /* Força fundo branco */
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background-color: #262730 !important; /* Cabeçalho escuro */
+            color: #ffffff !important; /* Texto do cabeçalho branco */
+            padding: 4px !important;
+        }
+        td {
+            padding: 4px !important;
+            border: 1px solid #cccccc !important;
+            vertical-align: top !important;
+        }
+        /* Estilo para as colunas do Índice (as que agrupam) */
+        .index_name, .level0, .level1, .level2, .level3, .level4, .level5 {
+            background-color: #f9f9f9 !important;
+            font-weight: bold !important;
+            color: #333333 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+  
     # organização da tabela:
   tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
   
