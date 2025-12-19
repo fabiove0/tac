@@ -73,8 +73,8 @@ else:
     ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
     st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
-# 1. CSS REFORÇADO (Para evitar o problema do "tudo branco")
- st.markdown("""
+  # 1. CSS REFORÇADO (Para evitar o problema do "tudo branco")
+  st.markdown("""
         <style>
         table {
             font-size: 9px !important;
@@ -101,11 +101,11 @@ else:
         }
         </style>
         """, unsafe_allow_html=True)
-  
-    # organização da tabela:
-  tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
-  
-  
-  st.write("### Prévia dos Dados")
-  # Mostra a tabela de forma interativa
-  st.table(tabela_visual)
+    
+      # organização da tabela:
+    tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
+    
+    
+    st.write("### Prévia dos Dados")
+    # Mostra a tabela de forma interativa
+    st.table(tabela_visual)
