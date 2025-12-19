@@ -62,11 +62,6 @@ else:
   col_esq, col_centro, col_dir = st.columns([1, 1, 1]) 
   
   with col_centro:
-    # O gráfico vai ficar limitado apenas ao tamanho desta coluna central
-    fig, ax = plt.subplots(figsize=(3, 3))
-    ax.pie(contagem.values, labels=contagem.index, autopct=fazer_rotulo, startangle=140)
-    st.pyplot(fig)
-    fig, ax = plt.subplots()                      # 1. Cria a base
     fig, ax = plt.subplots(figsize=(3, 3))                      # 1. Cria a base
     ax.pie(
         contagem.values,             # Os números
