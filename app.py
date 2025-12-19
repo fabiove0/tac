@@ -77,12 +77,10 @@ else:
   st.markdown("""
           <style>
           table {
-              font-size: 9px !important;
+              font-size: 6px;
               font-family: sans-serif;
           }
-          th {
-              background-color: #f0f2f6 !important;
-          }
+
           </style>
           """, unsafe_allow_html=True)
     
