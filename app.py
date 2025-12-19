@@ -75,30 +75,21 @@ else:
 
 # 1. CSS REFORÇADO (Para evitar o problema do "tudo branco")
   st.markdown("""
-      <style>
-      /* Força a cor da tabela para o Modo Escuro */
-      table {
-          font-size: 10px !important;
-          color: white !important; 
-          background-color: #0e1117 !important; /* Fundo escuro padrão */
-          width: 100%;
-      }
-      th {
-          background-color: #262730 !important; /* Cabeçalho cinza escuro */
-          color: white !important;
-          text-align: left !important;
-      }
-      td {
-          color: #dcdcdc !important; /* Texto cinza claro para as células */
-          border: 1px solid #4a4a4a !important;
-      }
-      </style>
-      """, unsafe_allow_html=True)
+          <style>
+          table {
+              font-size: 9px !important;
+              font-family: sans-serif;
+          }
+          th {
+              background-color: #f0f2f6 !important;
+          }
+          </style>
+          """, unsafe_allow_html=True)
+    
+    # organização da tabela:
+    tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
   
-  # organização da tabela:
-  tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
-
-
-  st.write("### Prévia dos Dados")
-  # Mostra a tabela de forma interativa
-  st.table(tabela_visual)
+  
+    st.write("### Prévia dos Dados")
+    # Mostra a tabela de forma interativa
+    st.table(tabela_visual)
