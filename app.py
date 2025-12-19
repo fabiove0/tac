@@ -39,8 +39,6 @@ if escolha_status != 'Todos':
 if len(tabela_para_exibir) == 0:
   st.warning("Nenhum dado encontrado com esse filtro.")
 else:
-  # organização da tabela:
-  tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
   # preparação do gráfico:
   colunas_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
   lista_empilhada = colunas_status.stack()
@@ -75,7 +73,39 @@ else:
     ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
     st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
+    # Injeta CSS para diminuir a fonte da tabela
+    st.markdown("""
+        <style>
+        div[data-testid="stDataFrame"] td, div[data-testid="stDataFrame"] th {
+            font-size: 11px !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+    
+    # organização da tabela:
+    tabela_visual = *abela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
+    st.dataframe(
+        tabela_visual,
+        use_container_width=True,  # Ocupa toda a largura da tela
+        height=None,               # MOSTRA A TABELA INTEIRA (sem barra de rolagem vertical)
+        column_config={
+                "ANO": st.column_config.TextColumn("Ano", width="small"),
+                "DOCUMENTO": st.column_config.TextColumn("Tac", width="small"),
+                "CLAUSULA": st.column_config.TextColumn("Cláusula", width="medium"),
+                "COMPROMISSO_DA_CLAUSULA": st.column_config.TextColumn("Compromisso (Cláusula)", width="large"),
+                "STATUS_DA_CLAUSULA": st.column_config.TextColumn("Status (Cláusula)", width="small"),
+                "OBS_SEJUS_CLAUSULA": st.column_config.TextColumn("Obs. SEJUS (Cláusula)", width="medium"),
+                "INCISO": st.column_config.TextColumn("Inciso", width="medium"),
+                "COMPROMISSO_INCISO": st.column_config.TextColumn("Compromisso (Inciso)", width="large"),
+                "STATUS_DO_INCISO": st.column_config.TextColumn("Status (Inciso)", width="small"),
+                "OBS_SEJUS_INCISO": st.column_config.TextColumn("Obs. SEJUS (Inciso)", width="medium"),
+                "ALINEA": st.column_config.TextColumn("Alínea", width="medium"),
+                "COMPROMISSO_DA_ALINEA": st.column_config.TextColumn("Compromisso (Alínea)", width="large"),
+                "STATUS_DA_ALINEA": st.column_config.TextColumn("Status (Alínea)", width="small"),
+                "OBS_SEJUS_ALINEA": st.column_config.TextColumn("Obs. SEJUS (Alínea)", width="medium"),
+            }
+    )
   
-  st.write("### Prévia dos Dados")
-  # Mostra a tabela de forma interativa
-  st.table(tabela_visual)
+    st.write("### Prévia dos Dados")
+    # Mostra a tabela de forma interativa
+    st.table(tabela_visual)
