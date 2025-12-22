@@ -10,21 +10,17 @@ st.title("📊 Painel de Monitoramento de TACs")
 url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzKqLRK17FmBUbOCv_DzHUqqXpSNJu8sfp2WNAHLfTBaUA0Eeq2WRSO9czpcfysEVfVCHtEsHkSygA/pub?gid=0&single=true&output=csv'
 df = pd.read_csv(url)
 df_tratado = df.fillna('')
-# 2. Substituímos o texto literal "\n" por um ENTER real (usamos duas barras para pegar o texto literal)
-df_tratado = df.fillna('')
+def normalizar_texto(x):
+    if isinstance(x, str):
+        x = x.replace('\\n', '\n')        # texto literal \n → quebra real
+        x = x.replace('\r\n', '\n')       # Windows → Unix
+        x = x.replace('\r', '\n')
+        x = ' '.join(x.splitlines())      # REMOVE todas as quebras
+        x = ' '.join(x.split())           # remove espaços extras
+    return x
 
-# Converte texto literal "\n" em quebra real
-df_tratado = df_tratado.replace(r'\\n', '\n', regex=True)
+df_tratado = df_tratado.applymap(normalizar_texto)
 
-# Remove quebras de linha duplicadas
-df_tratado = df_tratado.replace(r'\n+', '\n', regex=True)
-
-# Remove espaços extras
-df_tratado = df_tratado.replace(r'[ \t]+', ' ', regex=True)
-
-
-# 3. Opcional: Remove espaços duplos que costumam vir com essas quebras
-df_tratado = df_tratado.replace(r' +', ' ', regex=True)
 
 # 3. Criação dos Filtros
 lista_tacs = ['Todos'] + sorted(df_tratado['DOCUMENTO'].unique().tolist())
