@@ -75,46 +75,48 @@ else:
 
   # 1. CSS REFORÇADO (Para evitar o problema do "tudo branco")
   st.markdown("""
-  <style>
-  /* 1. CONFIGURAÇÃO NA TELA */
-  table {
-      font-size: 9px !important;
-      width: 100% !important;
-      border-collapse: collapse;
-      color: black !important;
-      background-color: white !important;
-  }
-  td, th { border: 1px solid #ccc !important; padding: 4px !important; }
-  
-  /* 2. CONFIGURAÇÃO PARA IMPRESSÃO (CTRL + P) */
-  @media print {
-      /* Esconde elementos desnecessários */
-      [data-testid="stSidebar"], header, footer, .stActionButton, [data-testid="stHeader"] {
-          display: none !important;
-      }
-      
-      /* Destrava os containers do Streamlit para permitir quebra de página */
-      .main, .block-container, div[data-testid="stVerticalBlock"] {
-          overflow: visible !important;
-          height: auto !important;
-          display: block !important;
-          padding: 0px !important;
-      }
-  
-      /* Configura a tabela para expandir e quebrar páginas */
-      table {
-          page-break-inside: auto;
-          width: 100% !important;
-          table-layout: fixed !important; /* Força o respeito às larguras */
-      }
-      tr { page-break-inside: avoid; page-break-after: auto; }
-      thead { display: table-header-group; } /* Repete o cabeçalho em cada página */
-      
-      /* Ajusta o tamanho da fonte para a impressão */
-      td, th { font-size: 8pt !important; word-wrap: break-word !important; }
-  }
-  </style>
-  """, unsafe_allow_html=True)
+    <style>
+    /* 1. VISUALIZAÇÃO NA TELA (Mantenha o que já funciona) */
+    table {
+        font-size: 9px !important;
+        width: 100% !important;
+        border-collapse: collapse;
+        color: black !important;
+        background-color: white !important;
+    }
+
+    /* 2. O SEGREDO PARA A ALTURA NO CTRL + P */
+    @media print {
+        /* Esconde elementos de interface */
+        [data-testid="stSidebar"], header, footer, .stActionButton {
+            display: none !important;
+        }
+
+        /* DESTRAVA TODOS OS CONTAINERS: Isso permite que o navegador veja as outras páginas */
+        html, body, .main, .block-container, 
+        div[data-testid="stVerticalBlock"], 
+        div[data-testid="stVerticalBlockBorderWrapper"],
+        div.element-container, 
+        div.stTable {
+            height: auto !important;
+            overflow: visible !important;
+            display: block !important;
+        }
+
+        /* CONFIGURAÇÕES DA TABELA PARA QUEBRA DE PÁGINA */
+        table {
+            page-break-inside: auto !important;
+        }
+        tr {
+            page-break-inside: avoid !important; /* Evita que uma linha seja cortada ao meio */
+            page-break-after: auto !important;
+        }
+        thead {
+            display: table-header-group !important; /* Repete o cabeçalho em toda página nova */
+        }
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
       # organização da tabela:
   tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
