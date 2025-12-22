@@ -117,10 +117,10 @@ else:
             autopct=fazer_rotulo,        # A porcentagem escrita
             startangle=140,              # Gira a pizza
             colors=plt.cm.Paired.colors, # Uma paleta de cores
-            textprops={'fontsize': 5}    # <--- ADICIONE ESTA LINHA (tente 8, 7 ou 6)
+            textprops={'fontsize': 3}    # <--- ADICIONE ESTA LINHA (tente 8, 7 ou 6)
         )
     # Título Dinâmico (Muda conforme o filtro)
-        ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
+        ax.set_title(f"Status de {escolha_tac}")
         st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
