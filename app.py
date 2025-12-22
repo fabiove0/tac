@@ -28,7 +28,7 @@ if escolha_tac != 'Todos':
 if escolha_status != 'Todos':
     clausula_tem = tabela_para_exibir['STATUS_DA_CLAUSULA'] == escolha_status
     inciso_tem = tabela_para_exibir['STATUS_DO_INCISO'] == escolha_status
-    alinea_tem = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status
+    alinea_tem = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status 
     tabela_para_exibir = tabela_para_exibir[clausula_tem | inciso_tem | alinea_tem]
 
 # 5. Visualização dos resultados
@@ -46,70 +46,77 @@ else:
     # --- PASSO B: CRIAÇÃO DO ARQUIVO HTML PARA IMPRESSÃO ---
     estilo_html_export = """
     <style>
-        body { font-family: Arial, sans-serif; margin: 10px; background-color: white; color: black; }
-        table { width: 100%; border-collapse: collapse; font-size: 8px; color: black; table-layout: auto; }
-        th, td { border: 1px solid #444; padding: 3px; text-align: left; vertical-align: top; white-space: normal; }
-        /* Impede que colunas pequenas quebrem linha (ex: ANO) */
-        th:nth-child(-n+3), td:nth-child(-n+3) { white-space: nowrap; }
-        thead th { background-color: #f2f2f2; font-weight: bold; }
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: white !important; color: black !important; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; color: black !important; }
+        th, td { border: 1px solid #444 !important; padding: 6px; text-align: left; vertical-align: top; color: black !important; background-color: white !important; font-weight: normal; }
+        thead th { background-color: #f2f2f2 !important; font-weight: bold !important; }
+        h2 { text-align: center; }
         @media print { thead { display: table-header-group; } table { page-break-inside: auto; } tr { page-break-inside: avoid; } }
     </style>
     """
     html_tabela = tabela_visual.to_html()
-    html_final = f"<html><head><meta charset='UTF-8'>{estilo_html_export}</head><body>{html_tabela}</body></html>"
+    html_final = f"<html><head><meta charset='UTF-8'>{estilo_html_export}</head><body><h2>Monitoramento de TACs</h2>{html_tabela}</body></html>"
 
     # --- PASSO C: BOTÕES E GRÁFICO ---
     col_btn1, col_btn2 = st.columns(2)
     with col_btn1:
-        st.download_button(label="📄 Gerar Arquivo para Impressão", data=html_final, file_name="relatorio.html", mime="text/html")
+        st.download_button(
+            label="📄 Gerar Arquivo para Impressão (PDF/HTML)",
+            data=html_final,
+            file_name="relatorio_tac.html",
+            mime="text/html"
+        )
     with col_btn2:
-        st.download_button(label="Excel: Exportar", data=df_tratado.to_csv(index=False).encode('utf-8'), file_name="dados.csv", mime="text/csv")
+        st.download_button(
+            label="Excel: Exportar Dados",
+            data=tabela_para_exibir.to_csv(index=False).encode('utf-8'),
+            file_name="dados_tac.csv",
+            mime="text/csv",
+        )
 
-    # Gráfico
+    # Gráfico de Pizza
     col_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
-    lista_final = [x for x in col_status.stack() if x != '']
-    if len(lista_final) > 0:
-        contagem = pd.Series(lista_final).value_counts()
-        col_esq, col_centro, col_dir = st.columns([1, 1, 1])
-        with col_centro:
-            fig, ax = plt.subplots(figsize=(2, 2))
-            ax.pie(contagem.values, labels=contagem.index, autopct='%1.1f%%', startangle=140, textprops={'fontsize': 5})
-            st.pyplot(fig, use_container_width=False)
+    lista_empilhada = col_status.stack()
+    if escolha_status == 'Todos':
+        lista_final = [x for x in lista_empilhada if x != '']
+    else:
+        lista_final = [x for x in lista_empilhada if x != '' and x == escolha_status]
+        
+    contagem = pd.Series(lista_final).value_counts()
+    total_geral = len(lista_final)
 
-    # --- PASSO D: CSS PARA ACABAR COM O "ESPREMIDO" NO SITE ---
+    # Desenha a Pizza
+    def fazer_rotulo (pct):
+        resultado= int(round(total_geral/ 100.0 * pct))
+        return f"{pct:.1f}%\n({resultado} itens)"
+        
+    col_esq, col_centro, col_dir = st.columns([1, 1, 1])
+    with col_centro:
+        fig, ax = plt.subplots(figsize=(2, 2))                      # 1. Cria a base
+        ax.pie(
+            contagem.values,             # Os números
+            labels=contagem.index,       # As legendas (Concluído, etc)
+            autopct=fazer_rotulo,        # A porcentagem escrita
+            startangle=140,              # Gira a pizza
+            colors=plt.cm.Paired.colors, # Uma paleta de cores
+            textprops={'fontsize': 5}    # <--- ADICIONE ESTA LINHA (tente 8, 7 ou 6)
+        )
+    # Título Dinâmico (Muda conforme o filtro)
+    ax.set_title(f"Status Geral - Filtro: {escolha_tac}")
+    st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
+
+    # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
     st.markdown("""
         <style>
-        /* Força a tabela a ter uma largura mínima para as colunas respirarem */
-        div[data-testid="stTable"] {
-            overflow-x: auto !important;
-        }
-        div[data-testid="stTable"] table {
-            width: 100% !important;
-            min-width: 1200px !important; /* Ajuste este valor se quiser mais ou menos espaço lateral */
-            background-color: white !important;
-            color: black !important;
-            font-size: 9px !important;
-        }
+        div[data-testid="stTable"] table { width: 100% !important; border-collapse: collapse !important; background-color: white !important; color: black !important; font-size: 10px !important; }
         div[data-testid="stTable"] th, div[data-testid="stTable"] td {
-            background-color: white !important;
-            color: black !important;
-            border: 1px solid #444 !important;
-            padding: 3px 5px !important; /* Padding reduzido para ganhar espaço */
-            vertical-align: top !important;
-            white-space: normal !important; /* Permite quebra nos textos longos */
+            background-color: white !important; color: black !important; border: 1px solid #444 !important;
+            padding: 6px !important; vertical-align: top !important; font-weight: normal !important; text-align: left !important;
         }
-        /* IMPEDE O ANO E DOCUMENTO DE FICAREM VERTICAIS */
-        div[data-testid="stTable"] th:nth-child(-n+3), 
-        div[data-testid="stTable"] td:nth-child(-n+3) {
-            white-space: nowrap !important;
-        }
-        div[data-testid="stTable"] thead tr th {
-            background-color: #f2f2f2 !important;
-            font-weight: bold !important;
-        }
+        div[data-testid="stTable"] thead tr th { background-color: #f2f2f2 !important; font-weight: bold !important; }
+        div[data-testid="stTable"] tr { background-color: white !important; }
         </style>
         """, unsafe_allow_html=True)
 
     st.write("### 📋 Relatório Consolidado")
     st.table(tabela_visual)
-    
