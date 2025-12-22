@@ -84,16 +84,7 @@ else:
             file_name="relatorio_tac.html",
             mime="text/html"
         )
-        '''
-    with col_btn2:
-        st.download_button(
-            label="Excel: Exportar Dados",
-            data=tabela_para_exibir.to_csv(index=False).encode('utf-8'),
-            file_name="dados_tac.csv",
-            mime="text/csv",
-        )
-        '''
-
+        
     # Gráfico de Pizza
     col_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
     lista_empilhada = col_status.stack()
