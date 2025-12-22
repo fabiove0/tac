@@ -29,6 +29,7 @@ lista_status = ['Todos'] + sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().toli
 st.sidebar.header("Filtros")
 escolha_tac = st.sidebar.selectbox("Selecione o Documento:", lista_tacs)
 escolha_status = st.sidebar.selectbox("Selecione o Status:", lista_status)
+busca = st.text_input("🔍 Buscar termo em todas as colunas:", "")
 
 # 4. Lógica de Filtragem
 tabela_para_exibir = df_tratado.copy()
@@ -41,6 +42,19 @@ if escolha_status != 'Todos':
     inciso_tem = tabela_para_exibir['STATUS_DO_INCISO'] == escolha_status
     alinea_tem = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status 
     tabela_para_exibir = tabela_para_exibir[clausula_tem | inciso_tem | alinea_tem]
+
+# 2. Aplicamos a lógica apenas se o usuário digitar algo
+if busca:
+    # Passo A: Transformamos toda a tabela em String (texto)
+    # Passo B: Verificamos se cada célula contém o termo (ignoring case/maiúsculas)
+    # Passo C: O .any(axis=1) verifica se há algum "True" na horizontal (linha)
+    
+    mascara = tabela_para_exibir.astype(str).apply(
+        lambda col: col.str.contains(busca, case=False, na=False)
+    ).any(axis=1)
+    
+    # Passo D: Filtramos a tabela original usando essa lista de Verdadeiros/Falsos
+    tabela_para_exibir = tabela_para_exibir[mascara]
 
 # 5. Visualização dos resultados
 if len(tabela_para_exibir) == 0:
@@ -127,7 +141,7 @@ else:
     st.dataframe(
     tabela_visual,
     use_container_width=True, # Faz a tabela ocupar a largura da tela
-    height=500,               # Você define uma altura fixa para a rolagem
+    height=700,               # Você define uma altura fixa para a rolagem
     column_config={
         "ANO": st.column_config.TextColumn("Ano", width="small"),
         "DOCUMENTO": st.column_config.TextColumn("Doc", width="medium"),
