@@ -11,9 +11,17 @@ url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzKqLRK17FmBUbOCv_DzHUqq
 df = pd.read_csv(url)
 df_tratado = df.fillna('')
 # 2. Substituímos o texto literal "\n" por um ENTER real (usamos duas barras para pegar o texto literal)
-# Fazemos isso em todas as colunas de uma vez
+df_tratado = df.fillna('')
+
+# Converte texto literal "\n" em quebra real
 df_tratado = df_tratado.replace(r'\\n', '\n', regex=True)
-df_tratado = df_tratado.replace(r'\n', '\n', regex=True)
+
+# Remove quebras de linha duplicadas
+df_tratado = df_tratado.replace(r'\n+', '\n', regex=True)
+
+# Remove espaços extras
+df_tratado = df_tratado.replace(r'[ \t]+', ' ', regex=True)
+
 
 # 3. Opcional: Remove espaços duplos que costumam vir com essas quebras
 df_tratado = df_tratado.replace(r' +', ' ', regex=True)
@@ -68,7 +76,7 @@ else:
         @media print { thead { display: table-header-group; } }
     </style>
     """
-    html_tabela = tabela_visual.to_html()
+    html_tabela = tabela_visual.to_html(escape=False)
     html_final = f"<html><head><meta charset='UTF-8'>{estilo_html_export}</head><body><h2>Monitoramento de TACs</h2>{html_tabela}</body></html>"
 
     # --- PASSO C: BOTÕES E GRÁFICO ---
