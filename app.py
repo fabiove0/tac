@@ -10,8 +10,13 @@ st.title("📊 Painel de Monitoramento de TACs")
 url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzKqLRK17FmBUbOCv_DzHUqqXpSNJu8sfp2WNAHLfTBaUA0Eeq2WRSO9czpcfysEVfVCHtEsHkSygA/pub?gid=0&single=true&output=csv'
 df = pd.read_csv(url)
 df_tratado = df.fillna('')
-# Transformamos o texto literal "\n" em uma quebra de linha real que o navegador entende
+# 2. Substituímos o texto literal "\n" por um ENTER real (usamos duas barras para pegar o texto literal)
+# Fazemos isso em todas as colunas de uma vez
 df_tratado = df_tratado.replace(r'\\n', '\n', regex=True)
+df_tratado = df_tratado.replace(r'\n', '\n', regex=True)
+
+# 3. Opcional: Remove espaços duplos que costumam vir com essas quebras
+df_tratado = df_tratado.replace(r' +', ' ', regex=True)
 
 # 3. Criação dos Filtros
 lista_tacs = ['Todos'] + sorted(df_tratado['DOCUMENTO'].unique().tolist())
