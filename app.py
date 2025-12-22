@@ -121,9 +121,6 @@ else:
             textprops={
                     'fontsize': 3,
                     'color': 'white',
-                    'path_effects': [
-                    pe.withStroke(linewidth=2, foreground='black')
-                    ]
                 },
             wedgeprops={'edgecolor': 'white'}
             )
