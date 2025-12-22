@@ -42,6 +42,50 @@ else:
   # preparação do gráfico:
   colunas_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
   lista_empilhada = colunas_status.stack()
+  # 2. CRIANDO O ARQUIVO DE IMPRESSÃO (HTML)
+    # Criamos um estilo CSS para o arquivo que será baixado
+  estilo_html = """
+  <style>
+      body { font-family: Arial, sans-serif; margin: 20px; }
+      table { width: 100%; border-collapse: collapse; font-size: 10px; }
+      th { background-color: #262730; color: white; padding: 8px; text-align: left; }
+      td { border: 1px solid #ccc; padding: 6px; vertical-align: top; }
+      h2 { text-align: center; color: #333; }
+      @media print {
+          header, footer { display: none; }
+          table { page-break-inside: auto; }
+          tr { page-break-inside: avoid; page-break-after: auto; }
+          thead { display: table-header-group; }
+      }
+  </style>
+  """
+  
+  # Geramos o HTML da tabela usando o Pandas
+  html_tabela = tabela_visual.to_html(classes='tabela_relatorio')
+  html_final = f"<html><head>{estilo_html}</head><body><h2>Relatório de Monitoramento de TACs</h2>{html_tabela}</body></html>"
+
+  # 3. BOTÕES NA INTERFACE DO STREAMLIT
+  col_btn1, col_btn2 = st.columns(2)
+  
+  with col_btn1:
+      # Botão para baixar a versão de impressão
+      st.download_button(
+          label="📄 Gerar Arquivo para Impressão (PDF/HTML)",
+          data=html_final,
+          file_name="relatorio_tac.html",
+          mime="text/html",
+          help="Baixe este arquivo, abra-o e aperte Ctrl+P para salvar como PDF"
+      )
+  
+  with col_btn2:
+      # Botão para Excel (Sempre bom ter como backup para 14 colunas)
+      # Requer a biblioteca 'openpyxl' instalada
+      st.download_button(
+          label="Excel: Exportar Dados",
+          data=tabela_para_exibir.to_csv(index=False).encode('utf-8'),
+          file_name="dados_tac.csv",
+          mime="text/csv",
+      )
 
   if escolha_status == 'Todos':
     lista_final = [x for x in lista_empilhada if x != '']
@@ -74,61 +118,7 @@ else:
     st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
   # 1. CSS REFORÇADO (Para evitar o problema do "tudo branco")
-  st.markdown("""
-    <style>
-    /* 1. ESTILO NA TELA (Sempre visível) */
-    table {
-        font-size: 10px !important;
-        width: 100% !important;
-        border-collapse: collapse;
-        color: black !important;
-        background-color: white !important;
-    }
-    td, th { border: 1px solid #ccc !important; padding: 4px !important; }
 
-    /* 2. O "MARTELO" PARA O CTRL + P FUNCIONAR */
-    @media print {
-        /* Remove TUDO que não é a tabela ou o gráfico */
-        [data-testid="stSidebar"], 
-        [data-testid="stHeader"], 
-        [data-testid="stFooter"], 
-        .stActionButton,
-        header {
-            display: none !important;
-        }
-
-        /* FORÇA O LAYOUT A SER UM DOCUMENTO FLUIDO (A chave do problema) */
-        /* Precisamos resetar o container de visualização do app */
-        .stApp, 
-        [data-testid="stAppViewContainer"], 
-        [data-testid="stMain"], 
-        [data-testid="stVerticalBlock"],
-        [data-testid="stVerticalBlockBorderWrapper"],
-        .main {
-            display: block !important;
-            position: static !important;
-            overflow: visible !important;
-            height: auto !important;
-            min-height: auto !important;
-        }
-
-        /* Garante que a tabela possa quebrar páginas */
-        table {
-            page-break-inside: auto !important;
-            height: auto !important;
-        }
-        tr {
-            page-break-inside: avoid !important;
-            page-break-after: auto !important;
-        }
-        
-        /* Ajuste de margens do papel */
-        @page {
-            margin: 1cm;
-        }
-    }
-    </style>
-    """, unsafe_allow_html=True)
     
       # organização da tabela:
   tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
