@@ -122,7 +122,7 @@ else:
             startangle=140,
             colors=plt.cm.Paired.colors,
             textprops={
-                'fontsize': 3,
+                'fontsize': 5,
                 'color': 'white',
                 'path_effects': [
                     pe.withStroke(linewidth=2, foreground='black')
