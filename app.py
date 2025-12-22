@@ -76,43 +76,55 @@ else:
   # 1. CSS REFORÇADO (Para evitar o problema do "tudo branco")
   st.markdown("""
     <style>
-    /* 1. VISUALIZAÇÃO NA TELA (Mantenha o que já funciona) */
+    /* 1. ESTILO NA TELA (Sempre visível) */
     table {
-        font-size: 9px !important;
+        font-size: 10px !important;
         width: 100% !important;
         border-collapse: collapse;
         color: black !important;
         background-color: white !important;
     }
+    td, th { border: 1px solid #ccc !important; padding: 4px !important; }
 
-    /* 2. O SEGREDO PARA A ALTURA NO CTRL + P */
+    /* 2. O "MARTELO" PARA O CTRL + P FUNCIONAR */
     @media print {
-        /* Esconde elementos de interface */
-        [data-testid="stSidebar"], header, footer, .stActionButton {
+        /* Remove TUDO que não é a tabela ou o gráfico */
+        [data-testid="stSidebar"], 
+        [data-testid="stHeader"], 
+        [data-testid="stFooter"], 
+        .stActionButton,
+        header {
             display: none !important;
         }
 
-        /* DESTRAVA TODOS OS CONTAINERS: Isso permite que o navegador veja as outras páginas */
-        html, body, .main, .block-container, 
-        div[data-testid="stVerticalBlock"], 
-        div[data-testid="stVerticalBlockBorderWrapper"],
-        div.element-container, 
-        div.stTable {
-            height: auto !important;
-            overflow: visible !important;
+        /* FORÇA O LAYOUT A SER UM DOCUMENTO FLUIDO (A chave do problema) */
+        /* Precisamos resetar o container de visualização do app */
+        .stApp, 
+        [data-testid="stAppViewContainer"], 
+        [data-testid="stMain"], 
+        [data-testid="stVerticalBlock"],
+        [data-testid="stVerticalBlockBorderWrapper"],
+        .main {
             display: block !important;
+            position: static !important;
+            overflow: visible !important;
+            height: auto !important;
+            min-height: auto !important;
         }
 
-        /* CONFIGURAÇÕES DA TABELA PARA QUEBRA DE PÁGINA */
+        /* Garante que a tabela possa quebrar páginas */
         table {
             page-break-inside: auto !important;
+            height: auto !important;
         }
         tr {
-            page-break-inside: avoid !important; /* Evita que uma linha seja cortada ao meio */
+            page-break-inside: avoid !important;
             page-break-after: auto !important;
         }
-        thead {
-            display: table-header-group !important; /* Repete o cabeçalho em toda página nova */
+        
+        /* Ajuste de margens do papel */
+        @page {
+            margin: 1cm;
         }
     }
     </style>
