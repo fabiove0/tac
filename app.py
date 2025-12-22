@@ -74,47 +74,47 @@ else:
     st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
   # 1. CSS REFORÇADO (Para evitar o problema do "tudo branco")
-   st.markdown("""
-      <style>
-      /* 1. CONFIGURAÇÃO NA TELA */
+  st.markdown("""
+  <style>
+  /* 1. CONFIGURAÇÃO NA TELA */
+  table {
+      font-size: 9px !important;
+      width: 100% !important;
+      border-collapse: collapse;
+      color: black !important;
+      background-color: white !important;
+  }
+  td, th { border: 1px solid #ccc !important; padding: 4px !important; }
+  
+  /* 2. CONFIGURAÇÃO PARA IMPRESSÃO (CTRL + P) */
+  @media print {
+      /* Esconde elementos desnecessários */
+      [data-testid="stSidebar"], header, footer, .stActionButton, [data-testid="stHeader"] {
+          display: none !important;
+      }
+      
+      /* Destrava os containers do Streamlit para permitir quebra de página */
+      .main, .block-container, div[data-testid="stVerticalBlock"] {
+          overflow: visible !important;
+          height: auto !important;
+          display: block !important;
+          padding: 0px !important;
+      }
+  
+      /* Configura a tabela para expandir e quebrar páginas */
       table {
-          font-size: 9px !important;
+          page-break-inside: auto;
           width: 100% !important;
-          border-collapse: collapse;
-          color: black !important;
-          background-color: white !important;
+          table-layout: fixed !important; /* Força o respeito às larguras */
       }
-      td, th { border: 1px solid #ccc !important; padding: 4px !important; }
-  
-      /* 2. CONFIGURAÇÃO PARA IMPRESSÃO (CTRL + P) */
-      @media print {
-          /* Esconde elementos desnecessários */
-          [data-testid="stSidebar"], header, footer, .stActionButton, [data-testid="stHeader"] {
-              display: none !important;
-          }
-          
-          /* Destrava os containers do Streamlit para permitir quebra de página */
-          .main, .block-container, div[data-testid="stVerticalBlock"] {
-              overflow: visible !important;
-              height: auto !important;
-              display: block !important;
-              padding: 0px !important;
-          }
-  
-          /* Configura a tabela para expandir e quebrar páginas */
-          table {
-              page-break-inside: auto;
-              width: 100% !important;
-              table-layout: fixed !important; /* Força o respeito às larguras */
-          }
-          tr { page-break-inside: avoid; page-break-after: auto; }
-          thead { display: table-header-group; } /* Repete o cabeçalho em cada página */
-          
-          /* Ajusta o tamanho da fonte para a impressão */
-          td, th { font-size: 8pt !important; word-wrap: break-word !important; }
-      }
-      </style>
-      """, unsafe_allow_html=True)
+      tr { page-break-inside: avoid; page-break-after: auto; }
+      thead { display: table-header-group; } /* Repete o cabeçalho em cada página */
+      
+      /* Ajusta o tamanho da fonte para a impressão */
+      td, th { font-size: 8pt !important; word-wrap: break-word !important; }
+  }
+  </style>
+  """, unsafe_allow_html=True)
     
       # organização da tabela:
   tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
