@@ -110,7 +110,7 @@ else:
         
     col_esq, col_centro, col_dir = st.columns([1, 1, 1])
     with col_centro:
-        fig, ax = plt.subplots(figsize=(3, 3), facecolor='none')
+        fig, ax = plt.subplots(figsize=(3, 3))
     
         ax.pie(
             contagem.values,
