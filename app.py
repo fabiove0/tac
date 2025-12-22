@@ -89,7 +89,7 @@ else:
     col_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
     lista_empilhada = col_status.stack()
     if escolha_status == 'Todos':
-        lista_final = [x for x in lista_empilhada if x != '']
+        lista_final = [x for x in lista_empilhada if x != '' and  x != 'NÃO SE APLICA']
     else:
         lista_final = [x for x in lista_empilhada if x != '' and x == escolha_status]
         
