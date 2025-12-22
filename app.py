@@ -118,5 +118,5 @@ else:
         "DOCUMENTO": st.column_config.TextColumn("Doc", width="medium"),
         "COMPROMISSO_DA_CLAUSULA": st.column_config.TextColumn("Compromisso", width="large"),
         # Você pode configurar todas as colunas aqui...
-    }
-)
+        }
+    )
