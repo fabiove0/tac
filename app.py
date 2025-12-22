@@ -110,7 +110,7 @@ else:
         
     col_esq, col_centro, col_dir = st.columns([1, 1, 1])
     with col_centro:
-        fig, ax = plt.subplots(figsize=(2, 2), facecolor='none')
+        fig, ax = plt.subplots(figsize=(3, 3), facecolor='none')
         ax.set_facecolor('none')                      # 1. Cria a base
         ax.pie(
             contagem.values,             # Os números
@@ -120,14 +120,12 @@ else:
             colors=plt.cm.Paired.colors, # Uma paleta de cores
             textprops={
                     'fontsize': 3,
-                    'color': 'white'}    # <--- ADICIONE ESTA LINHA (tente 8, 7 ou 6)
-        )
-    # Título Dinâmico (Muda conforme o filtro)
-        ax.set_title(
-            f"Status Geral - Filtro: {escolha_tac}",
-            color='white'
-        )
-
+                    'color': 'white',
+                    'path_effects': [
+                    pe.withStroke(linewidth=2, foreground='black')
+                    ]
+                },
+            wedgeprops={'edgecolor': 'white'}
         st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
