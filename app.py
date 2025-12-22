@@ -108,15 +108,50 @@ else:
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
     st.markdown("""
         <style>
-        div[data-testid="stTable"] table { width: 100% !important; border-collapse: collapse !important; background-color: white !important; color: black !important; font-size: 10px !important; }
-        div[data-testid="stTable"] th, div[data-testid="stTable"] td {
-            background-color: white !important; color: black !important; border: 1px solid #444 !important;
-            padding: 6px !important; vertical-align: top !important; font-weight: normal !important; text-align: left !important;
+        /* Cria uma barra de rolagem horizontal para a tabela não esmagar as colunas */
+        div[data-testid="stTable"] {
+            overflow-x: auto !important;
         }
-        div[data-testid="stTable"] thead tr th { background-color: #f2f2f2 !important; font-weight: bold !important; }
-        div[data-testid="stTable"] tr { background-color: white !important; }
+
+        div[data-testid="stTable"] table {
+            width: 100% !important;
+            min-width: 1600px !important; /* FORÇA a tabela a ser larga o suficiente */
+            background-color: white !important;
+            color: black !important;
+            border-collapse: collapse !important;
+            font-family: sans-serif !important;
+        }
+
+        /* Formatação de células e bordas pretas como na imagem */
+        div[data-testid="stTable"] th, div[data-testid="stTable"] td {
+            border: 1px solid #000 !important;
+            padding: 8px !important;
+            font-size: 11px !important;
+            color: black !important;
+            vertical-align: top !important;
+            line-height: 1.4 !important;
+        }
+
+        /* IMPEDE que ANO e DOCUMENTO fiquem verticais */
+        div[data-testid="stTable"] tr th:nth-child(-n+3), 
+        div[data-testid="stTable"] tr td:nth-child(-n+3) {
+            white-space: nowrap !important; 
+            min-width: 80px !important;
+        }
+
+        /* Cabeçalho cinza e negrito igual ao PDF */
+        div[data-testid="stTable"] thead tr th {
+            background-color: #f2f2f2 !important;
+            font-weight: bold !important;
+            text-align: center !important;
+        }
+
+        /* Padroniza o fundo das linhas para branco (remove zebra do Streamlit) */
+        div[data-testid="stTable"] tr {
+            background-color: white !important;
+        }
         </style>
         """, unsafe_allow_html=True)
 
-    st.write("### 📋 Relatório Consolidado")
+    st.write("### 📋 Relatório")
     st.table(tabela_visual)
