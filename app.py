@@ -1,6 +1,8 @@
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
+import matplotlib.patheffects as pe
+
 
 # 1. Configuração da Página
 st.set_page_config(page_title="Monitoramento de TACs", layout="wide")
@@ -110,21 +112,27 @@ else:
         
     col_esq, col_centro, col_dir = st.columns([1, 1, 1])
     with col_centro:
-        fig, ax = plt.subplots(figsize=(3, 3), facecolor='none')
-        ax.set_facecolor('none')                      # 1. Cria a base
-        ax.pie(
-            contagem.values,             # Os números
-            labels=contagem.index,       # As legendas (Concluído, etc)
-            autopct=fazer_rotulo,        # A porcentagem escrita
-            startangle=140,              # Gira a pizza
-            colors=plt.cm.Paired.colors, # Uma paleta de cores
-            textprops={
-                    'fontsize': 3,
-                    'color': 'white',
-                },
-            wedgeprops={'edgecolor': 'white'}
-            )
-        st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
+    fig, ax = plt.subplots(figsize=(3, 3), facecolor='none')
+    ax.set_facecolor('none')
+
+    ax.pie(
+        contagem.values,
+        labels=contagem.index,
+        autopct=fazer_rotulo,
+        startangle=140,
+        colors=plt.cm.Paired.colors,
+        textprops={
+            'fontsize': 3,
+            'color': 'white',
+            'path_effects': [
+                pe.withStroke(linewidth=2, foreground='black')
+            ]
+        },
+        wedgeprops={'edgecolor': 'white'}
+    )
+    
+    st.pyplot(fig, use_container_width=False)
+                                 # 3. Entrega pro Streamlit
 
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
     
