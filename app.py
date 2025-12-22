@@ -106,16 +106,6 @@ else:
         st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
-    Para que a tabela caiba inteira na largura da tela sem barra de rolagem horizontal, precisamos remover a trava de "largura mínima" que havíamos colocado e reduzir ainda mais o tamanho da fonte e o espaçamento interno (padding).
-
-Nesta configuração, o navegador será forçado a "espremer" as colunas para dentro do limite visual da sua tela, fazendo com que os textos longos quebrem em mais linhas para compensar a falta de largura.
-
-Código Corrigido para Ajuste Total à Tela
-Substitua o bloco de CSS (Passo D) e o comando da tabela no seu código por este:
-
-Python
-
-    # --- PASSO D: CSS PARA ENCAIXE TOTAL NA LARGURA DA TELA (SEM ROLAGEM) ---
     st.markdown("""
         <style>
         /* Remove qualquer barra de rolagem horizontal */
