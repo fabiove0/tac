@@ -110,14 +110,17 @@ else:
         
     col_esq, col_centro, col_dir = st.columns([1, 1, 1])
     with col_centro:
-        fig, ax = plt.subplots(figsize=(2, 2))                      # 1. Cria a base
+        fig, ax = plt.subplots(figsize=(2, 2), facecolor='none')
+        ax.set_facecolor('none')                      # 1. Cria a base
         ax.pie(
             contagem.values,             # Os números
             labels=contagem.index,       # As legendas (Concluído, etc)
             autopct=fazer_rotulo,        # A porcentagem escrita
             startangle=140,              # Gira a pizza
             colors=plt.cm.Paired.colors, # Uma paleta de cores
-            textprops={'fontsize': 3}    # <--- ADICIONE ESTA LINHA (tente 8, 7 ou 6)
+            textprops={
+                    'fontsize': 3
+                    'color': 'white'}    # <--- ADICIONE ESTA LINHA (tente 8, 7 ou 6)
         )
     # Título Dinâmico (Muda conforme o filtro)
         ax.set_title(f"Status de: {escolha_tac}")
