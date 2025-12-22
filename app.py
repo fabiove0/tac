@@ -106,49 +106,59 @@ else:
         st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
+    Para que a tabela caiba inteira na largura da tela sem barra de rolagem horizontal, precisamos remover a trava de "largura mínima" que havíamos colocado e reduzir ainda mais o tamanho da fonte e o espaçamento interno (padding).
+
+Nesta configuração, o navegador será forçado a "espremer" as colunas para dentro do limite visual da sua tela, fazendo com que os textos longos quebrem em mais linhas para compensar a falta de largura.
+
+Código Corrigido para Ajuste Total à Tela
+Substitua o bloco de CSS (Passo D) e o comando da tabela no seu código por este:
+
+Python
+
+    # --- PASSO D: CSS PARA ENCAIXE TOTAL NA LARGURA DA TELA (SEM ROLAGEM) ---
     st.markdown("""
         <style>
-        /* Cria uma barra de rolagem horizontal para a tabela não esmagar as colunas */
+        /* Remove qualquer barra de rolagem horizontal */
         div[data-testid="stTable"] {
-            overflow-x: auto !important;
+            overflow-x: hidden !important;
         }
 
         div[data-testid="stTable"] table {
             width: 100% !important;
-            min-width: 1600px !important; /* FORÇA a tabela a ser larga o suficiente */
+            table-layout: auto !important; /* Deixa o navegador calcular o melhor ajuste */
             background-color: white !important;
             color: black !important;
             border-collapse: collapse !important;
-            font-family: sans-serif !important;
         }
 
-        /* Formatação de células e bordas pretas como na imagem */
+        /* Diminuição agressiva da fonte e padding para caber tudo */
         div[data-testid="stTable"] th, div[data-testid="stTable"] td {
             border: 1px solid #000 !important;
-            padding: 8px !important;
-            font-size: 11px !important;
+            padding: 2px 4px !important; /* Espaço interno mínimo */
+            font-size: 8px !important;    /* Fonte bem pequena para não forçar a largura */
             color: black !important;
             vertical-align: top !important;
-            line-height: 1.4 !important;
+            line-height: 1.1 !important;
+            white-space: normal !important; /* Força o texto a quebrar linha sempre que possível */
+            word-break: break-all !important; /* Permite quebrar palavras se necessário para não vazar */
         }
 
-        /* IMPEDE que ANO e DOCUMENTO fiquem verticais */
-        div[data-testid="stTable"] tr th:nth-child(-n+3), 
-        div[data-testid="stTable"] tr td:nth-child(-n+3) {
-            white-space: nowrap !important; 
-            min-width: 80px !important;
-        }
-
-        /* Cabeçalho cinza e negrito igual ao PDF */
+        /* Cabeçalho superior */
         div[data-testid="stTable"] thead tr th {
             background-color: #f2f2f2 !important;
             font-weight: bold !important;
             text-align: center !important;
         }
 
-        /* Padroniza o fundo das linhas para branco (remove zebra do Streamlit) */
+        /* Garante que o fundo seja sempre branco */
         div[data-testid="stTable"] tr {
             background-color: white !important;
+        }
+
+        /* Ajuste específico para colunas de identificação não sumirem */
+        div[data-testid="stTable"] tr th:nth-child(1), 
+        div[data-testid="stTable"] tr td:nth-child(1) {
+            min-width: 30px !important; /* Largura mínima para o ANO */
         }
         </style>
         """, unsafe_allow_html=True)
