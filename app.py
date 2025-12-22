@@ -55,16 +55,41 @@ else:
     # Preparação do HTML para Impressão
     estilo_html = """
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; color: black; background-color: white; }
-        table { width: 100%; border-collapse: collapse; font-size: 9px; color: black; }
-        th { background-color: #262730; color: white; padding: 6px; text-align: left; border: 1px solid #ccc; }
-        td { border: 1px solid #ccc; padding: 4px; vertical-align: top; color: black; }
-        h2 { text-align: center; }
+        /* Força fundo branco e texto preto em todo o corpo do arquivo */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: white !important; color: black !important; }
+        h2 { text-align: center; color: black; }
+
+        /* UNIFORMIZAÇÃO TOTAL DA TABELA */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 10px; 
+            background-color: white !important; 
+            color: black !important; 
+        }
+
+        /* th = parte agrupada / td = parte comum */
+        /* Aplicamos a mesma regra para ambos para não haver diferença visual */
+        th, td { 
+            border: 1px solid #444 !important; /* Borda cinza escura para ficar nítida */
+            padding: 6px !important; 
+            text-align: left !important; 
+            vertical-align: top !important; 
+            color: black !important; 
+            background-color: white !important; 
+            font-weight: normal; /* Remove o negrito automático do índice se desejar */
+        }
+
+        /* Estilo apenas para a PRIMEIRA LINHA (Cabeçalho de títulos) */
+        thead th { 
+            background-color: #f2f2f2 !important; /* Cinza bem claro para destacar o título */
+            font-weight: bold !important; 
+        }
+
         @media print { 
-            header, footer, .no-print { display: none; } 
             table { page-break-inside: auto; }
             tr { page-break-inside: avoid; page-break-after: auto; }
-            thead { display: table-header-group; }
+            thead { display: table-header-group; } 
         }
     </style>
     """
