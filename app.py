@@ -126,6 +126,7 @@ else:
                     ]
                 },
             wedgeprops={'edgecolor': 'white'}
+            )
         st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
