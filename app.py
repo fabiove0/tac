@@ -106,42 +106,17 @@ else:
         st.pyplot(fig, use_container_width=False)                                 # 3. Entrega pro Streamlit
 
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
-    st.markdown("""
-        <style>
-        /* Container principal para evitar rolagem se possível */
-        div[data-testid="stTable"] {
-            overflow-x: auto !important; /* Permite rolagem apenas se for estritamente necessário para não quebrar o texto */
-        }
-        
-        div[data-testid="stTable"] table {
-            width: 100% !important;
-            background-color: white !important;
-            border-collapse: collapse !important;
-        }
-
-        /* Configuração de células: fonte bem pequena para caber horizontalmente */
-        div[data-testid="stTable"] th, div[data-testid="stTable"] td {
-            border: 1px solid #000 !important;
-            padding: 2px 3px !important;
-            font-size: 7.5px !important; /* Fonte reduzida para ganhar espaço */
-            color: black !important;
-            vertical-align: top !important;
-            background-color: white !important;
-        }
-
-        /* O SEGREDO: impede o texto dos cabeçalhos de ficar na vertical */
-        div[data-testid="stTable"] th {
-            white-space: nowrap !important; 
-            background-color: #f2f2f2 !important;
-            font-weight: bold !important;
-            text-align: center !important;
-        }
-
-        /* Remove zebra e mantém tudo branco */
-        div[data-testid="stTable"] tr { background-color: white !important; }
-        </style>
-        """, unsafe_allow_html=True)
-        """, unsafe_allow_html=True)
+    
 
     st.write("### 📋 Relatório")
-    st.table(tabela_visual)
+    st.dataframe(
+    tabela_visual,
+    use_container_width=True, # Faz a tabela ocupar a largura da tela
+    height=500,               # Você define uma altura fixa para a rolagem
+    column_config={
+        "ANO": st.column_config.TextColumn("Ano", width="small"),
+        "DOCUMENTO": st.column_config.TextColumn("Doc", width="medium"),
+        "COMPROMISSO_DA_CLAUSULA": st.column_config.TextColumn("Compromisso", width="large"),
+        # Você pode configurar todas as colunas aqui...
+    }
+)
