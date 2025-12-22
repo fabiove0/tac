@@ -108,49 +108,39 @@ else:
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
     st.markdown("""
         <style>
-        /* Remove qualquer barra de rolagem horizontal */
+        /* Container principal para evitar rolagem se possível */
         div[data-testid="stTable"] {
-            overflow-x: hidden !important;
+            overflow-x: auto !important; /* Permite rolagem apenas se for estritamente necessário para não quebrar o texto */
         }
-
+        
         div[data-testid="stTable"] table {
             width: 100% !important;
-            table-layout: auto !important; /* Deixa o navegador calcular o melhor ajuste */
             background-color: white !important;
-            color: black !important;
             border-collapse: collapse !important;
         }
 
-        /* Diminuição agressiva da fonte e padding para caber tudo */
+        /* Configuração de células: fonte bem pequena para caber horizontalmente */
         div[data-testid="stTable"] th, div[data-testid="stTable"] td {
             border: 1px solid #000 !important;
-            padding: 2px 4px !important; /* Espaço interno mínimo */
-            font-size: 8px !important;    /* Fonte bem pequena para não forçar a largura */
+            padding: 2px 3px !important;
+            font-size: 7.5px !important; /* Fonte reduzida para ganhar espaço */
             color: black !important;
             vertical-align: top !important;
-            line-height: 1.1 !important;
-            white-space: normal !important; /* Força o texto a quebrar linha sempre que possível */
-            word-break: break-all !important; /* Permite quebrar palavras se necessário para não vazar */
+            background-color: white !important;
         }
 
-        /* Cabeçalho superior */
-        div[data-testid="stTable"] thead tr th {
+        /* O SEGREDO: impede o texto dos cabeçalhos de ficar na vertical */
+        div[data-testid="stTable"] th {
+            white-space: nowrap !important; 
             background-color: #f2f2f2 !important;
             font-weight: bold !important;
             text-align: center !important;
         }
 
-        /* Garante que o fundo seja sempre branco */
-        div[data-testid="stTable"] tr {
-            background-color: white !important;
-        }
-
-        /* Ajuste específico para colunas de identificação não sumirem */
-        div[data-testid="stTable"] tr th:nth-child(1), 
-        div[data-testid="stTable"] tr td:nth-child(1) {
-            min-width: 30px !important; /* Largura mínima para o ANO */
-        }
+        /* Remove zebra e mantém tudo branco */
+        div[data-testid="stTable"] tr { background-color: white !important; }
         </style>
+        """, unsafe_allow_html=True)
         """, unsafe_allow_html=True)
 
     st.write("### 📋 Relatório")
