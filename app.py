@@ -1,8 +1,6 @@
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
-import matplotlib.patheffects as pe
-
 
 # 1. Configuração da Página
 st.set_page_config(page_title="Monitoramento de TACs", layout="wide")
@@ -113,7 +111,6 @@ else:
     col_esq, col_centro, col_dir = st.columns([1, 1, 1])
     with col_centro:
         fig, ax = plt.subplots(figsize=(3, 3), facecolor='none')
-        ax.set_facecolor('none')
     
         ax.pie(
             contagem.values,
@@ -123,12 +120,8 @@ else:
             colors=plt.cm.Paired.colors,
             textprops={
                 'fontsize': 5,
-                'color': 'white',
-                'path_effects': [
-                    pe.withStroke(linewidth=2, foreground='black')
-                ]
-            },
-            wedgeprops={'edgecolor': 'white'}
+                'color': 'black',
+            }
         )
         
         st.pyplot(fig, use_container_width=False)
