@@ -46,12 +46,19 @@ else:
     # --- PASSO B: CRIAÇÃO DO ARQUIVO HTML PARA IMPRESSÃO ---
     estilo_html_export = """
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: white !important; color: black !important; }
-        table { width: 100%; border-collapse: collapse; font-size: 10px; color: black !important; }
-        th, td { border: 1px solid #444 !important; padding: 6px; text-align: left; vertical-align: top; color: black !important; background-color: white !important; font-weight: normal; }
-        thead th { background-color: #f2f2f2 !important; font-weight: bold !important; }
-        h2 { text-align: center; }
-        @media print { thead { display: table-header-group; } table { page-break-inside: auto; } tr { page-break-inside: avoid; } }
+        body { font-family: Arial, sans-serif; margin: 20px; color: black; background-color: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        th, td { 
+            border: 1px solid #444; 
+            padding: 8px; 
+            text-align: left; 
+            vertical-align: top; 
+            /* AQUI ESTÁ A CORREÇÃO: interpreta o \n como quebra de linha real */
+            white-space: pre-wrap !important; 
+            word-wrap: break-word;
+        }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        @media print { thead { display: table-header-group; } }
     </style>
     """
     html_tabela = tabela_visual.to_html()
