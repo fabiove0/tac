@@ -60,9 +60,6 @@ else:
   </style>
   """
   
-  # Geramos o HTML da tabela usando o Pandas
-  html_tabela = tabela_visual.to_html(classes='tabela_relatorio')
-  html_final = f"<html><head>{estilo_html}</head><body><h2>Relatório de Monitoramento de TACs</h2>{html_tabela}</body></html>"
 
   # 3. BOTÕES NA INTERFACE DO STREAMLIT
   col_btn1, col_btn2 = st.columns(2)
@@ -122,7 +119,9 @@ else:
     
       # organização da tabela:
   tabela_visual = tabela_para_exibir.set_index(['ANO', 'DOCUMENTO','CLAUSULA','COMPROMISSO_DA_CLAUSULA', 'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'  ])
-    
+    # Geramos o HTML da tabela usando o Pandas
+  html_tabela = tabela_visual.to_html(classes='tabela_relatorio')
+  html_final = f"<html><head>{estilo_html}</head><body><h2>Relatório de Monitoramento de TACs</h2>{html_tabela}</body></html>"
     
   st.write("### Prévia dos Dados")
     # Mostra a tabela de forma interativa
