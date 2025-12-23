@@ -66,12 +66,6 @@ if termo_busca:
 
     # 3. Filtramos a tabela com base na escolha acima
     tabela_para_exibir = tabela_para_exibir[mask]
-    mascara = tabela_para_exibir.astype(str).apply(
-        lambda col: col.str.contains(busca, case=False, na=False)
-    ).any(axis=1)
-
-    # Passo D: Filtramos a tabela original usando essa lista de Verdadeiros/Falsos
-    tabela_para_exibir = tabela_para_exibir[mascara]
 
 # 5. Visualização dos resultados
 if len(tabela_para_exibir) == 0:
