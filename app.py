@@ -10,17 +10,17 @@ st.title("📊 Painel de Monitoramento de TACs")
 url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzKqLRK17FmBUbOCv_DzHUqqXpSNJu8sfp2WNAHLfTBaUA0Eeq2WRSO9czpcfysEVfVCHtEsHkSygA/pub?gid=0&single=true&output=csv'
 df = pd.read_csv(url)
 df_tratado = df.fillna('')
-
 def normalizar_texto(x):
     if isinstance(x, str):
         x = x.replace('\\n', '\n')        # texto literal \n → quebra real
         x = x.replace('\r\n', '\n')       # Windows → Unix
         x = x.replace('\r', '\n')
-        x = ' '.join(x.splitlines())      # Transforma quebras em espaços para a visualização inicial
+        x = ' '.join(x.splitlines())      # REMOVE todas as quebras
         x = ' '.join(x.split())           # remove espaços extras
     return x
 
 df_tratado = df_tratado.applymap(normalizar_texto)
+
 
 # 3. Criação dos Filtros
 lista_tacs = ['Todos'] + sorted(df_tratado['DOCUMENTO'].unique().tolist())
@@ -43,19 +43,22 @@ if escolha_status != 'Todos':
     alinea_tem = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status
     tabela_para_exibir = tabela_para_exibir[clausula_tem | inciso_tem | alinea_tem]
 
-# Busca Global Corrigida
+# 2. Aplicamos a lógica apenas se o usuário digitar algo
+    # Passo A: Transformamos toda a tabela em String (texto)
+    # Passo B: Verificamos se cada célula contém o termo (ignoring case/maiúsculas)
+    # Passo C: O .any(axis=1) verifica se há algum "True" na horizontal (linha)
 if termo_busca:
-    mask = tabela_para_exibir.astype(str).apply(
-        lambda x: x.str.contains(termo_busca, case=False, na=False)
-    ).any(axis=1)
-    tabela_para_exibir = tabela_para_exibir[mask]
+  mask = tabela_para_exibir.astype(str).apply(
+            lambda x: x.str.contains(termo_busca, case=False, na=False)
+        ).any(axis=1)
+    # Passo D: Filtramos a tabela original usando essa lista de Verdadeiros/Falsos
+  tabela_para_exibir = tabela_para_exibir[mask]
 
 # 5. Visualização dos resultados
 if len(tabela_para_exibir) == 0:
     st.warning("Nenhum dado encontrado com esse filtro.")
 else:
-    # --- PASSO A: PREPARAÇÃO DA TABELA (NIVELAMENTO TOTAL) ---
-    # Colocamos todas as colunas no índice para evitar o "degrau" no cabeçalho
+    # --- PASSO A: PREPARAÇÃO DA TABELA AGRUPADA ---
     colunas_index = [
         'ANO', 'DOCUMENTO', 'CLAUSULA', 'COMPROMISSO_DA_CLAUSULA',
         'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO',
@@ -64,35 +67,24 @@ else:
     ]
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
 
-    # --- PASSO B: CSS DO HTML PARA IMPRESSÃO (PERFEITO) ---
+    # --- PASSO B: CRIAÇÃO DO ARQUIVO HTML PARA IMPRESSÃO ---
     estilo_html_export = """
     <style>
-        body { font-family: Arial, sans-serif; margin: 10px; color: black; background-color: white; }
-        table { width: 100%; border-collapse: collapse; font-size: 8px; table-layout: auto; }
-        
-        /* th = Cabeçalhos | td = Dados */
-        th, td { 
-            border: 1px solid #444; 
-            padding: 6px; 
-            text-align: left; 
-            vertical-align: top; 
+        body { font-family: Arial, sans-serif; margin: 20px; color: black; background-color: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        th, td {
+            border: 1px solid #444;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+            /* AQUI ESTÁ A CORREÇÃO: interpreta o \n como quebra de linha real */
+            white-space: pre-wrap !important;
+            word-wrap: break-word;
         }
-
-        /* O Segredo: impede o texto vertical e nivela tudo no centro */
-        th { 
-            background-color: #f2f2f2; 
-            font-weight: bold; 
-            white-space: nowrap !important; /* Impede o texto de "emagrecer" e ficar vertical */
-            text-align: center;
-            vertical-align: middle !important;
-        }
-
-        td { white-space: pre-wrap !important; word-wrap: break-word; }
+        th { background-color: #f2f2f2; font-weight: bold; }
         @media print { thead { display: table-header-group; } }
     </style>
     """
-    
-    # Geramos o HTML garantindo que as quebras de linha sejam respeitadas
     html_tabela = tabela_visual.to_html(escape=False)
     html_final = f"<html><head><meta charset='UTF-8'>{estilo_html_export}</head><body><h2>Monitoramento de TACs</h2>{html_tabela}</body></html>"
 
@@ -100,7 +92,7 @@ else:
     col_btn1, col_btn2 = st.columns(2)
     with col_btn1:
         st.download_button(
-            label="📄 Gerar Arquivo para Impressão (HTML)",
+            label="📄 Gerar Arquivo para Impressão (PDF/HTML)",
             data=html_final,
             file_name="relatorio_tac.html",
             mime="text/html"
@@ -110,35 +102,49 @@ else:
     col_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
     lista_empilhada = col_status.stack()
     if escolha_status == 'Todos':
-        lista_final = [x for x in lista_empilhada if x != '' and x != 'NÃO SE APLICA']
+        lista_final = [x for x in lista_empilhada if x != '' and  x != 'NÃO SE APLICA']
     else:
         lista_final = [x for x in lista_empilhada if x != '' and x == escolha_status]
 
-    if len(lista_final) > 0:
-        contagem = pd.Series(lista_final).value_counts()
-        total_geral = len(lista_final)
+    contagem = pd.Series(lista_final).value_counts()
+    total_geral = len(lista_final)
 
-        def fazer_rotulo(pct):
-            resultado = int(round(total_geral / 100.0 * pct))
-            return f"{pct:.1f}%\n({resultado} itens)"
+    # Desenha a Pizza
+    def fazer_rotulo (pct):
+        resultado= int(round(total_geral/ 100.0 * pct))
+        return f"{pct:.1f}%\n({resultado} itens)"
 
-        c1, c2, c3 = st.columns([1, 1, 1])
-        with c2:
-            fig, ax = plt.subplots(figsize=(3, 3))
-            ax.pie(contagem.values, labels=contagem.index, autopct=fazer_rotulo,
-                   startangle=140, colors=plt.cm.Paired.colors,
-                   textprops={'fontsize': 5, 'color': 'black'})
-            st.pyplot(fig, use_container_width=False)
+    col_esq, col_centro, col_dir = st.columns([1, 1, 1])
+    with col_centro:
+        fig, ax = plt.subplots(figsize=(3, 3))
 
-    # --- PASSO D: VISUALIZAÇÃO NO SITE ---
+        ax.pie(
+            contagem.values,
+            labels=contagem.index,
+            autopct=fazer_rotulo,
+            startangle=140,
+            colors=plt.cm.Paired.colors,
+            textprops={
+                'fontsize': 5,
+                'color': 'black',
+            }
+        )
+
+        st.pyplot(fig, use_container_width=False)
+                                 # 3. Entrega pro Streamlit
+
+    # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
+
+
     st.write("### 📋 Relatório")
     st.dataframe(
-        tabela_visual,
-        use_container_width=True,
-        height=700,
-        column_config={
-            "ANO": st.column_config.TextColumn("Ano", width="small"),
-            "DOCUMENTO": st.column_config.TextColumn("Doc", width="medium"),
-            "COMPROMISSO_DA_CLAUSULA": st.column_config.TextColumn("Compromisso", width="large"),
+    tabela_visual,
+    use_container_width=True, # Faz a tabela ocupar a largura da tela
+    height=700,               # Você define uma altura fixa para a rolagem
+    column_config={
+        "ANO": st.column_config.TextColumn("Ano", width="small"),
+        "DOCUMENTO": st.column_config.TextColumn("Doc", width="medium"),
+        "COMPROMISSO_DA_CLAUSULA": st.column_config.TextColumn("Compromisso", width="large"),
+        # Você pode configurar todas as colunas aqui...
         }
     )
