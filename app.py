@@ -48,24 +48,11 @@ if escolha_status != 'Todos':
     # Passo B: Verificamos se cada célula contém o termo (ignoring case/maiúsculas)
     # Passo C: O .any(axis=1) verifica se há algum "True" na horizontal (linha)
 if termo_busca:
-    # 2. Verificamos se o usuário usou aspas duplas no início e no fim
-    if termo_busca.startswith('"') and termo_busca.endswith('"'):
-        # --- BUSCA EXATA ---
-        # Removemos as aspas para pesquisar apenas o texto interno
-        termo_exato = termo_busca[1:-1]
-        
-        # O operador == exige que a célula seja IDENTICA ao que foi digitado
-        mask = (tabela_para_exibir.astype(str) == termo_exato).any(axis=1)
-        
-    else:
-        # --- BUSCA PARCIAL (Padrão) ---
-        # Continua encontrando "2018" se você digitar apenas "20"
-        mask = tabela_para_exibir.astype(str).apply(
+  mask = tabela_para_exibir.astype(str).apply(
             lambda x: x.str.contains(termo_busca, case=False, na=False)
         ).any(axis=1)
-
-    # 3. Filtramos a tabela com base na escolha acima
-    tabela_para_exibir = tabela_para_exibir[mask]
+    # Passo D: Filtramos a tabela original usando essa lista de Verdadeiros/Falsos
+  tabela_para_exibir = tabela_para_exibir[mask]
 
 # 5. Visualização dos resultados
 if len(tabela_para_exibir) == 0:
@@ -82,18 +69,28 @@ else:
     # --- PASSO B: CRIAÇÃO DO ARQUIVO HTML PARA IMPRESSÃO ---
     estilo_html_export = """
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; color: black; background-color: white; }
-        table { width: 100%; border-collapse: collapse; font-size: 10px; }
-        th, td {
-            border: 1px solid #444;
-            padding: 8px;
-            text-align: left;
-            vertical-align: top;
-            /* AQUI ESTÁ A CORREÇÃO: interpreta o \n como quebra de linha real */
-            white-space: pre-wrap !important;
-            word-wrap: break-word;
+        body { font-family: Arial, sans-serif; margin: 10px; color: black; background-color: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 8px; table-layout: auto; }
+        
+        /* Regra geral para bordas e preenchimento */
+        th, td { border: 1px solid #444; padding: 4px; text-align: left; vertical-align: top; }
+
+        /* CABEÇALHOS: O segredo para não ficarem verticais */
+        th { 
+            background-color: #f2f2f2; 
+            font-weight: bold; 
+            white-space: nowrap; /* Impede que o título quebre linha ou fique vertical */
+            text-align: center;
         }
-        th { background-color: #f2f2f2; font-weight: bold; }
+
+        /* DADOS: Permite a quebra de linha para o texto longo não sumir */
+        td { 
+            white-space: pre-wrap !important; 
+            word-wrap: break-word; 
+            max-width: 300px; /* Limita a largura das colunas de texto longo */
+        }
+
+        h2 { text-align: center; font-size: 14px; }
         @media print { thead { display: table-header-group; } }
     </style>
     """
