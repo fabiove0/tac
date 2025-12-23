@@ -62,26 +62,35 @@ else:
     colunas_index = [
         'ANO', 'DOCUMENTO', 'CLAUSULA', 'COMPROMISSO_DA_CLAUSULA',
         'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO',
-        'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO',
-        'ALINEA', 'COMPROMISSO_DA_ALINEA', 'STATUS_DA_ALINEA', 'OBS_SEJUS_ALINEA'
+        'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'
     ]
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
 
     # --- PASSO B: CRIAÇÃO DO ARQUIVO HTML PARA IMPRESSÃO ---
     estilo_html_export = """
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; color: black; background-color: white; }
-        table { width: 100%; border-collapse: collapse; font-size: 10px; }
-        th, td {
-            border: 1px solid #444;
-            padding: 8px;
-            text-align: left;
-            vertical-align: top;
-            /* AQUI ESTÁ A CORREÇÃO: interpreta o \n como quebra de linha real */
-            white-space: pre-wrap !important;
-            word-wrap: break-word;
+        body { font-family: Arial, sans-serif; margin: 10px; color: black; background-color: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 8px; table-layout: auto; }
+        
+        /* Regra geral para bordas e preenchimento */
+        th, td { border: 1px solid #444; padding: 4px; text-align: left; vertical-align: top; }
+
+        /* CABEÇALHOS: O segredo para não ficarem verticais */
+        th { 
+            background-color: #f2f2f2; 
+            font-weight: bold; 
+            white-space: nowrap; /* Impede que o título quebre linha ou fique vertical */
+            text-align: center;
         }
-        th { background-color: #f2f2f2; font-weight: bold; }
+
+        /* DADOS: Permite a quebra de linha para o texto longo não sumir */
+        td { 
+            white-space: pre-wrap !important; 
+            word-wrap: break-word; 
+            max-width: 300px; /* Limita a largura das colunas de texto longo */
+        }
+
+        h2 { text-align: center; font-size: 14px; }
         @media print { thead { display: table-header-group; } }
     </style>
     """
