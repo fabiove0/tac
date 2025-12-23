@@ -62,7 +62,8 @@ else:
     colunas_index = [
         'ANO', 'DOCUMENTO', 'CLAUSULA', 'COMPROMISSO_DA_CLAUSULA',
         'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO',
-        'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'
+        'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO',
+        'ALINEA', 'COMPROMISSO_DA_ALINEA', 'STATUS_DA_ALINEA', 'OBS_SEJUS_ALINEA'
     ]
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
 
