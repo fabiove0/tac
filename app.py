@@ -29,7 +29,7 @@ lista_status = ['Todos'] + sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().toli
 st.sidebar.header("Filtros")
 escolha_tac = st.sidebar.selectbox("Selecione o Documento:", lista_tacs)
 escolha_status = st.sidebar.selectbox("Selecione o Status:", lista_status)
-busca = st.text_input("🔍 Buscar termo em todas as colunas:", "")
+termo_busca = st.text_input("🔍 Buscar termo em todas as colunas:", "")
 
 # 4. Lógica de Filtragem
 tabela_para_exibir = df_tratado.copy()
@@ -40,19 +40,36 @@ if escolha_tac != 'Todos':
 if escolha_status != 'Todos':
     clausula_tem = tabela_para_exibir['STATUS_DA_CLAUSULA'] == escolha_status
     inciso_tem = tabela_para_exibir['STATUS_DO_INCISO'] == escolha_status
-    alinea_tem = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status 
+    alinea_tem = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status
     tabela_para_exibir = tabela_para_exibir[clausula_tem | inciso_tem | alinea_tem]
 
 # 2. Aplicamos a lógica apenas se o usuário digitar algo
-if busca:
     # Passo A: Transformamos toda a tabela em String (texto)
     # Passo B: Verificamos se cada célula contém o termo (ignoring case/maiúsculas)
     # Passo C: O .any(axis=1) verifica se há algum "True" na horizontal (linha)
-    
+if termo_busca:
+    # 2. Verificamos se o usuário usou aspas duplas no início e no fim
+    if termo_busca.startswith('"') and termo_busca.endswith('"'):
+        # --- BUSCA EXATA ---
+        # Removemos as aspas para pesquisar apenas o texto interno
+        termo_exato = termo_busca[1:-1]
+        
+        # O operador == exige que a célula seja IDENTICA ao que foi digitado
+        mask = (tabela_para_exibir.astype(str) == termo_exato).any(axis=1)
+        
+    else:
+        # --- BUSCA PARCIAL (Padrão) ---
+        # Continua encontrando "2018" se você digitar apenas "20"
+        mask = tabela_para_exibir.astype(str).apply(
+            lambda x: x.str.contains(termo_busca, case=False, na=False)
+        ).any(axis=1)
+
+    # 3. Filtramos a tabela com base na escolha acima
+    tabela_para_exibir = tabela_para_exibir[mask]
     mascara = tabela_para_exibir.astype(str).apply(
         lambda col: col.str.contains(busca, case=False, na=False)
     ).any(axis=1)
-    
+
     # Passo D: Filtramos a tabela original usando essa lista de Verdadeiros/Falsos
     tabela_para_exibir = tabela_para_exibir[mascara]
 
@@ -62,8 +79,8 @@ if len(tabela_para_exibir) == 0:
 else:
     # --- PASSO A: PREPARAÇÃO DA TABELA AGRUPADA ---
     colunas_index = [
-        'ANO', 'DOCUMENTO', 'CLAUSULA', 'COMPROMISSO_DA_CLAUSULA', 
-        'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO', 
+        'ANO', 'DOCUMENTO', 'CLAUSULA', 'COMPROMISSO_DA_CLAUSULA',
+        'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO',
         'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO'
     ]
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
@@ -73,13 +90,13 @@ else:
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; color: black; background-color: white; }
         table { width: 100%; border-collapse: collapse; font-size: 10px; }
-        th, td { 
-            border: 1px solid #444; 
-            padding: 8px; 
-            text-align: left; 
-            vertical-align: top; 
+        th, td {
+            border: 1px solid #444;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
             /* AQUI ESTÁ A CORREÇÃO: interpreta o \n como quebra de linha real */
-            white-space: pre-wrap !important; 
+            white-space: pre-wrap !important;
             word-wrap: break-word;
         }
         th { background-color: #f2f2f2; font-weight: bold; }
@@ -98,7 +115,7 @@ else:
             file_name="relatorio_tac.html",
             mime="text/html"
         )
-        
+
     # Gráfico de Pizza
     col_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
     lista_empilhada = col_status.stack()
@@ -106,7 +123,7 @@ else:
         lista_final = [x for x in lista_empilhada if x != '' and  x != 'NÃO SE APLICA']
     else:
         lista_final = [x for x in lista_empilhada if x != '' and x == escolha_status]
-        
+
     contagem = pd.Series(lista_final).value_counts()
     total_geral = len(lista_final)
 
@@ -114,11 +131,11 @@ else:
     def fazer_rotulo (pct):
         resultado= int(round(total_geral/ 100.0 * pct))
         return f"{pct:.1f}%\n({resultado} itens)"
-        
+
     col_esq, col_centro, col_dir = st.columns([1, 1, 1])
     with col_centro:
         fig, ax = plt.subplots(figsize=(3, 3))
-    
+
         ax.pie(
             contagem.values,
             labels=contagem.index,
@@ -130,12 +147,12 @@ else:
                 'color': 'black',
             }
         )
-        
+
         st.pyplot(fig, use_container_width=False)
                                  # 3. Entrega pro Streamlit
 
     # --- PASSO D: PADRONIZAÇÃO VISUAL DA TABELA NO SITE ---
-    
+
 
     st.write("### 📋 Relatório")
     st.dataframe(
