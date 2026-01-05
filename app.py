@@ -59,15 +59,17 @@ else:
         'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO', 'ALINEA',
         'COMPROMISSO_ALINEA', 'STATUS_DA_ALINEA', 'OBS_SEJUS_ALINEA'
     ]
+
+    # 🔥 AQUI ESTÁ A ALTERAÇÃO PRINCIPAL 🔥
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
+    tabela_visual.index.names = [None] * tabela_visual.index.nlevels
+    # 🔥 FIM DA ALTERAÇÃO 🔥
 
     # ===============================
     # CSS DA TABELA (TELA)
     # ===============================
     st.markdown("""
 <style>
-
-/* Força fundo branco no container da tabela */
 .tabela-relatorio {
     width: 100%;
     border-collapse: collapse;
@@ -77,7 +79,6 @@ else:
     color: black;
 }
 
-/* Células */
 .tabela-relatorio th,
 .tabela-relatorio td {
     border: 1px solid #444;
@@ -90,18 +91,15 @@ else:
     color: black;
 }
 
-/* Cabeçalho */
 .tabela-relatorio th {
     font-weight: bold;
     text-align: center;
 }
 
-/* Remove influência do tema escuro do Streamlit */
 div[data-testid="stMarkdownContainer"] table {
     background-color: white !important;
     color: black !important;
 }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -116,14 +114,14 @@ div[data-testid="stMarkdownContainer"] table {
             color: black;
             background-color: white;
         }
-    
+
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 10px;
             table-layout: fixed;
         }
-    
+
         th, td {
             border: 1px solid #444;
             padding: 8px;
@@ -132,39 +130,42 @@ div[data-testid="stMarkdownContainer"] table {
             white-space: normal;
             word-wrap: break-word;
         }
-    
+
         th {
             background-color: #f2f2f2;
             font-weight: bold;
         }
-    
-        /* 🔥 ISSO AQUI É O MAIS IMPORTANTE 🔥 */
-        tr {
+
+        tr, td, th {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
         }
-    
-        td, th {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
-        }
-    
+
         table {
             page-break-inside: auto;
         }
-    
+
         @media print {
             thead {
                 display: table-header-group;
             }
-            tfoot {
-                display: table-footer-group;
-            }
         }
     </style>
     """
+
     html_tabela = tabela_visual.to_html(escape=False)
-    html_final = f"<html><head><meta charset='UTF-8'>{estilo_html_export}</head><body><h2>Monitoramento de TACs</h2>{html_tabela}</body></html>"
+    html_final = f"""
+    <html>
+        <head>
+            <meta charset='UTF-8'>
+            {estilo_html_export}
+        </head>
+        <body>
+            <h2>Monitoramento de TACs</h2>
+            {html_tabela}
+        </body>
+    </html>
+    """
 
     st.download_button(
         label="📄 Gerar Arquivo para Impressão (PDF/HTML)",
@@ -178,7 +179,6 @@ div[data-testid="stMarkdownContainer"] table {
     # ===============================
     col_status = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
     lista_empilhada = col_status.stack()
-
     lista_final = [x for x in lista_empilhada if x != '' and x != 'NÃO SE APLICA']
     contagem = pd.Series(lista_final).value_counts()
     total_geral = len(lista_final)
