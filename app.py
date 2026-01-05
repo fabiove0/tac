@@ -76,7 +76,6 @@ else:
             padding: 8px;
             text-align: left;
             vertical-align: top;
-            /* AQUI ESTÁ A CORREÇÃO: interpreta o \n como quebra de linha real */
             white-space: pre-wrap !important;
             word-wrap: break-word;
         }
@@ -136,14 +135,4 @@ else:
 
 
     st.write("### 📋 Relatório")
-    st.dataframe(
-    tabela_visual,
-    use_container_width=True, # Faz a tabela ocupar a largura da tela
-    height=700,               # Você define uma altura fixa para a rolagem
-    column_config={
-        "ANO": st.column_config.TextColumn("Ano", width="small"),
-        "DOCUMENTO": st.column_config.TextColumn("Doc", width="medium"),
-        "COMPROMISSO_DA_CLAUSULA": st.column_config.TextColumn("Compromisso", width="large"),
-        # Você pode configurar todas as colunas aqui...
-        }
-    )
+    st.table(html_tabela)
