@@ -110,18 +110,57 @@ div[data-testid="stMarkdownContainer"] table {
     # ===============================
     estilo_html_export = """
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; color: black; background-color: white; }
-        table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: black;
+            background-color: white;
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            table-layout: fixed;
+        }
+    
         th, td {
             border: 1px solid #444;
             padding: 8px;
             text-align: left;
             vertical-align: top;
-            white-space: pre-wrap !important;
+            white-space: normal;
             word-wrap: break-word;
         }
-        th { background-color: #f2f2f2; font-weight: bold; }
-        @media print { thead { display: table-header-group; } }
+    
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+    
+        /* 🔥 ISSO AQUI É O MAIS IMPORTANTE 🔥 */
+        tr {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+    
+        td, th {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+    
+        table {
+            page-break-inside: auto;
+        }
+    
+        @media print {
+            thead {
+                display: table-header-group;
+            }
+            tfoot {
+                display: table-footer-group;
+            }
+        }
     </style>
     """
     html_tabela = tabela_visual.to_html(escape=False)
