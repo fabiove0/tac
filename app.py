@@ -60,10 +60,7 @@ else:
         'COMPROMISSO_ALINEA', 'STATUS_DA_ALINEA', 'OBS_SEJUS_ALINEA'
     ]
 
-    # 🔥 AQUI ESTÁ A ALTERAÇÃO PRINCIPAL 🔥
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
-    tabela_visual.index.names = [None] * tabela_visual.index.nlevels
-    # 🔥 FIM DA ALTERAÇÃO 🔥
 
     # ===============================
     # CSS DA TABELA (TELA)
@@ -153,7 +150,10 @@ div[data-testid="stMarkdownContainer"] table {
     </style>
     """
 
-    html_tabela = tabela_visual.to_html(escape=False)
+    html_tabela = tabela_visual.to_html(
+    escape=False,
+    index_names=False
+    )
     html_final = f"""
     <html>
         <head>
@@ -205,8 +205,10 @@ div[data-testid="stMarkdownContainer"] table {
     st.write("### 📋 Relatório")
 
     html_tabela_site = tabela_visual.to_html(
-        escape=False,
-        classes="tabela-relatorio"
+    escape=False,
+    classes="tabela-relatorio",
+    index_names=False
     )
+
 
     st.markdown(html_tabela_site, unsafe_allow_html=True)
