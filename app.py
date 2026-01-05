@@ -25,7 +25,7 @@ df_tratado = df_tratado.applymap(normalizar_texto)
 # 3. Criação dos Filtros
 lista_tacs = ['Todos'] + sorted(df_tratado['DOCUMENTO'].unique().tolist())
 lista_status = ['Todos'] + sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().tolist())
-
+st.sidebar.image("logo_sejus.png", use_container_width=True)
 st.sidebar.header("Filtros")
 escolha_tac = st.sidebar.selectbox("Selecione o Documento:", lista_tacs)
 escolha_status = st.sidebar.selectbox("Selecione o Status:", lista_status)
