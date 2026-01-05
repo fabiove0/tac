@@ -29,7 +29,7 @@ lista_status = ['Todos'] + sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().toli
 st.sidebar.header("Filtros")
 escolha_tac = st.sidebar.selectbox("Selecione o Documento:", lista_tacs)
 escolha_status = st.sidebar.selectbox("Selecione o Status:", lista_status)
-termo_busca = st.text_input("🔍 Buscar termo em todas as colunas:", "")
+termo_busca = st.text_input("🔍 Filtrar tabela por termo:", "")
 
 # 4. Lógica de Filtragem
 tabela_para_exibir = df_tratado.copy()
@@ -69,7 +69,7 @@ else:
     .tabela-relatorio {
         width: 100%;
         border-collapse: collapse;
-        font-size: 11px;
+        font-size: 10px;
         table-layout: fixed;
     }
 
@@ -84,7 +84,7 @@ else:
     }
 
     .tabela-relatorio th {
-        background-color: #1f2937;
+        background-color: #FFFFFF;
         color: white;
         font-weight: bold;
         text-align: center;
