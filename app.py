@@ -65,32 +65,45 @@ else:
     # CSS DA TABELA (TELA)
     # ===============================
     st.markdown("""
-    <style>
-    .tabela-relatorio {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 10px;
-        table-layout: fixed;
-    }
+<style>
 
-    .tabela-relatorio th,
-    .tabela-relatorio td {
-        border: 1px solid #555;
-        padding: 8px;
-        text-align: left;
-        vertical-align: top;
-        word-wrap: break-word;
-        white-space: normal;
-    }
+/* Força fundo branco no container da tabela */
+.tabela-relatorio {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+    table-layout: fixed;
+    background-color: white;
+    color: black;
+}
 
-    .tabela-relatorio th {
-        background-color: #FFFFFF;
-        color: white;
-        font-weight: bold;
-        text-align: center;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+/* Células */
+.tabela-relatorio th,
+.tabela-relatorio td {
+    border: 1px solid #444;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+    word-wrap: break-word;
+    white-space: normal;
+    background-color: white;
+    color: black;
+}
+
+/* Cabeçalho */
+.tabela-relatorio th {
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Remove influência do tema escuro do Streamlit */
+div[data-testid="stMarkdownContainer"] table {
+    background-color: white !important;
+    color: black !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
     # ===============================
     # BOTÃO DE DOWNLOAD (PDF / HTML)
