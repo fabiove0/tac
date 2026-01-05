@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # 1. Configuração da Página
 st.set_page_config(page_title="Monitoramento de TACs", layout="wide")
-st.title("📊 Painel de Monitoramento de TACs")
+st.title("Painel de Monitoramento de TACs")
 
 # 2. Carregamento e tratamento dos dados
 url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzKqLRK17FmBUbOCv_DzHUqqXpSNJu8sfp2WNAHLfTBaUA0Eeq2WRSO9czpcfysEVfVCHtEsHkSygA/pub?gid=0&single=true&output=csv'
