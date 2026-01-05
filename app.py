@@ -135,4 +135,4 @@ else:
 
 
     st.write("### 📋 Relatório")
-    st.table(html_tabela)
+    st.table(tabela_visual)
