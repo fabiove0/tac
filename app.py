@@ -130,6 +130,44 @@ else:
     # ======================================================
     st.markdown("""
     <style>
+            /* ===============================
+           CORES APENAS NAS COLUNAS DE STATUS
+           =============================== */
+        
+        /* STATUS DA CLÁUSULA */
+        .tabela-relatorio tbody td:nth-child(5):contains("CONCLUÍDO"),
+        .tabela-relatorio tbody td:nth-child(9):contains("CONCLUÍDO"),
+        .tabela-relatorio tbody td:nth-child(13):contains("CONCLUÍDO") {
+            background-color: #d4edda;
+            color: #155724;
+            font-weight: bold;
+        }
+        
+        /* EM ANDAMENTO */
+        .tabela-relatorio tbody td:nth-child(5):contains("EM ANDAMENTO"),
+        .tabela-relatorio tbody td:nth-child(9):contains("EM ANDAMENTO"),
+        .tabela-relatorio tbody td:nth-child(13):contains("EM ANDAMENTO") {
+            background-color: #fff3cd;
+            color: #856404;
+            font-weight: bold;
+        }
+        
+        /* NÃO INICIADO */
+        .tabela-relatorio tbody td:nth-child(5):contains("NÃO INICIADO"),
+        .tabela-relatorio tbody td:nth-child(9):contains("NÃO INICIADO"),
+        .tabela-relatorio tbody td:nth-child(13):contains("NÃO INICIADO") {
+            background-color: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+        }
+        
+        /* NÃO SE APLICA */
+        .tabela-relatorio tbody td:nth-child(5):contains("NÃO SE APLICA"),
+        .tabela-relatorio tbody td:nth-child(9):contains("NÃO SE APLICA"),
+        .tabela-relatorio tbody td:nth-child(13):contains("NÃO SE APLICA") {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
         .tabela-relatorio {
             width: 100%;
             border-collapse: collapse;
