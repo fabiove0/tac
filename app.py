@@ -48,21 +48,26 @@ def estilizar_status(texto):
         return texto
     
     texto_upper = texto.upper().strip()
-    cor = None
+    bg_color = None
+    text_color = "black"
     
-    # Define a cor baseada no conteúdo
+    # Define as cores de "sombreamento" (estilo marca-texto)
     if "CONCLUÍDO" in texto_upper or "CUMPRIDO" in texto_upper:
-        cor = "green"
+        bg_color = "#C6EFCE"  # Verde claro
+        text_color = "#006100" # Verde escuro para o texto
     elif "EM ANDAMENTO" in texto_upper:
-        cor = "#FFD700" # Amarelo/Dourado
-    elif "NÃO INICIADO" in texto_upper or "NAO INICIADO" in texto_upper:
-        cor = "red"
+        bg_color = "#FFEB9C"  # Amarelo claro
+        text_color = "#9C6500" # Marrom/Laranja para o texto
+    elif "NÃO INICIADO" in texto_upper or "NAO INICIADO" in texto_upper or "ATRASADO" in texto_upper:
+        bg_color = "#FFC7CE"  # Vermelho claro
+        text_color = "#9C0006" # Vermelho escuro para o texto
     elif "NÃO SE APLICA" in texto_upper or "NAO SE APLICA" in texto_upper:
-        cor = "grey"
+        bg_color = "#E7E7E7"  # Cinza claro
+        text_color = "#333333" # Cinza escuro para o texto
     
-    # Se houver uma cor correspondente, aplica o sublinhado
-    if cor:
-        return f'<span style="text-decoration: underline; text-decoration-color: {cor}; text-decoration-thickness: 2px;">{texto}</span>'
+    # Se houver uma cor, aplica o sombreamento atrás da letra
+    if bg_color:
+        return f'<span style="background-color: {bg_color}; color: {text_color}; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{texto}</span>'
     
     return texto
 
@@ -139,16 +144,20 @@ if len(tabela_para_exibir) == 0:
     st.warning("Nenhum dado encontrado com esse filtro.")
 
 else:
+    # 1. Criamos a cópia para formatar
     tabela_visual_formatada = tabela_para_exibir.copy()
     
+    # 2. Aplicamos o sombreamento nas colunas de status
     colunas_status = ['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']
     for col in colunas_status:
         if col in tabela_visual_formatada.columns:
             tabela_visual_formatada[col] = tabela_visual_formatada[col].apply(estilizar_status)
     
+    # 3. IMPORTANTE: Criamos a tabela_visual a partir da tabela FORMATADA
     colunas_index = list(mapa_titulos.keys())
     tabela_visual = tabela_visual_formatada.set_index(colunas_index)
-    # aplica nomes amigáveis APENAS NA EXIBIÇÃO
+
+    # 4. Aplica os nomes amigáveis
     tabela_visual.index.names = [
         mapa_titulos[c] for c in tabela_visual.index.names
     ]
