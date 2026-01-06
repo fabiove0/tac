@@ -147,8 +147,7 @@ else:
             tabela_visual_formatada[col] = tabela_visual_formatada[col].apply(estilizar_status)
     
     colunas_index = list(mapa_titulos.keys())
-    tabela_visual = tabela_para_exibir.set_index(colunas_index)
-
+    tabela_visual = tabela_visual_formatada.set_index(colunas_index)
     # aplica nomes amigáveis APENAS NA EXIBIÇÃO
     tabela_visual.index.names = [
         mapa_titulos[c] for c in tabela_visual.index.names
