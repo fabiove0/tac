@@ -30,12 +30,7 @@ df_tratado = df.fillna('')
 # FUNÇÕES AUXILIARES
 # ==========================================================
 def normalizar_texto(x):
-    """
-    Normaliza textos vindos da planilha:
-    - Remove quebras de linha
-    - Remove espaços duplicados
-    - Mantém tudo em uma única linha
-    """
+    """Normaliza textos da planilha"""
     if isinstance(x, str):
         x = x.replace('\\n', '\n')
         x = x.replace('\r\n', '\n')
@@ -46,10 +41,7 @@ def normalizar_texto(x):
 
 
 def fazer_rotulo(pct):
-    """
-    Gera o rótulo do gráfico de pizza
-    com percentual e valor absoluto.
-    """
+    """Rótulo do gráfico de pizza"""
     resultado = int(round(total_geral / 100.0 * pct))
     return f"{pct:.1f}%\n({resultado} itens)"
 
@@ -61,7 +53,28 @@ df_tratado = df_tratado.applymap(normalizar_texto)
 
 
 # ==========================================================
-# CRIAÇÃO DOS FILTROS (SIDEBAR)
+# MAPA DE TÍTULOS AMIGÁVEIS (APENAS VISUAL)
+# ==========================================================
+mapa_titulos = {
+    'ANO': 'Ano',
+    'DOCUMENTO': 'Documento',
+    'CLAUSULA': 'Cláusula',
+    'COMPROMISSO_DA_CLAUSULA': 'Compromisso da Cláusula',
+    'STATUS_DA_CLAUSULA': 'Status da Cláusula',
+    'OBS_SEJUS_CLAUSULA': 'Observações (SEJUS) – Cláusula',
+    'INCISO': 'Inciso',
+    'COMPROMISSO_INCISO': 'Compromisso do Inciso',
+    'STATUS_DO_INCISO': 'Status do Inciso',
+    'OBS_SEJUS_INCISO': 'Observações (SEJUS) – Inciso',
+    'ALINEA': 'Alínea',
+    'COMPROMISSO_ALINEA': 'Compromisso da Alínea',
+    'STATUS_DA_ALINEA': 'Status da Alínea',
+    'OBS_SEJUS_ALINEA': 'Observações (SEJUS) – Alínea'
+}
+
+
+# ==========================================================
+# FILTROS (SIDEBAR)
 # ==========================================================
 lista_tacs = ['Todos'] + sorted(df_tratado['DOCUMENTO'].unique().tolist())
 lista_status = ['Todos'] + sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().tolist())
@@ -79,54 +92,44 @@ termo_busca = st.text_input("🔍 Filtrar tabela por termo:", "")
 # ==========================================================
 tabela_para_exibir = df_tratado.copy()
 
-# Filtro por Documento
 if escolha_tac != 'Todos':
     tabela_para_exibir = tabela_para_exibir[
         tabela_para_exibir['DOCUMENTO'] == escolha_tac
     ]
 
-# Filtro por Status (Cláusula, Inciso ou Alínea)
 if escolha_status != 'Todos':
-    clausula_tem = tabela_para_exibir['STATUS_DA_CLAUSULA'] == escolha_status
-    inciso_tem = tabela_para_exibir['STATUS_DO_INCISO'] == escolha_status
-    alinea_tem = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status
-
     tabela_para_exibir = tabela_para_exibir[
-        clausula_tem | inciso_tem | alinea_tem
+        (tabela_para_exibir['STATUS_DA_CLAUSULA'] == escolha_status) |
+        (tabela_para_exibir['STATUS_DO_INCISO'] == escolha_status) |
+        (tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status)
     ]
 
-# Filtro por termo de busca livre
 if termo_busca:
     mask = tabela_para_exibir.astype(str).apply(
         lambda x: x.str.contains(termo_busca, case=False, na=False)
     ).any(axis=1)
-
     tabela_para_exibir = tabela_para_exibir[mask]
 
 
 # ==========================================================
-# VISUALIZAÇÃO DOS RESULTADOS
+# VISUALIZAÇÃO
 # ==========================================================
 if len(tabela_para_exibir) == 0:
     st.warning("Nenhum dado encontrado com esse filtro.")
 
 else:
-    # ------------------------------------------------------
-    # DEFINIÇÃO DAS COLUNAS DE ÍNDICE (TABELA AGRUPADA)
-    # ------------------------------------------------------
-    colunas_index = [
-        'ANO', 'DOCUMENTO', 'CLAUSULA', 'COMPROMISSO_DA_CLAUSULA',
-        'STATUS_DA_CLAUSULA', 'OBS_SEJUS_CLAUSULA', 'INCISO',
-        'COMPROMISSO_INCISO', 'STATUS_DO_INCISO', 'OBS_SEJUS_INCISO',
-        'ALINEA', 'COMPROMISSO_ALINEA', 'STATUS_DA_ALINEA',
-        'OBS_SEJUS_ALINEA'
-    ]
-
+    colunas_index = list(mapa_titulos.keys())
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
+
+    # Aplica títulos amigáveis SOMENTE NA EXIBIÇÃO
+    tabela_visual_exibicao = tabela_visual.copy()
+    tabela_visual_exibicao.index.names = [
+        mapa_titulos.get(c, c) for c in tabela_visual.index.names
+    ]
 
 
     # ======================================================
-    # CSS DA TABELA (VISUALIZAÇÃO NA TELA)
+    # CSS DA TABELA (TELA)
     # ======================================================
     st.markdown("""
     <style>
@@ -143,12 +146,11 @@ else:
         .tabela-relatorio td {
             border: 1px solid #444;
             padding: 8px;
-            text-align: left;
             vertical-align: top;
-            word-wrap: break-word;
             white-space: normal;
-            background-color: white;
-            color: black;
+            word-break: normal;
+            overflow-wrap: anywhere;
+            hyphens: auto;
         }
 
         .tabela-relatorio th {
@@ -159,66 +161,14 @@ else:
         .tabela-relatorio thead tr:first-child {
             display: none;
         }
-
-        div[data-testid="stMarkdownContainer"] table {
-            background-color: white !important;
-            color: black !important;
-        }
     </style>
     """, unsafe_allow_html=True)
 
 
     # ======================================================
-    # EXPORTAÇÃO HTML / IMPRESSÃO
+    # EXPORTAÇÃO HTML
     # ======================================================
-    estilo_html_export = """
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            color: black;
-            background-color: white;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10px;
-            table-layout: fixed;
-        }
-
-        th, td {
-            border: 1px solid #444;
-            padding: 8px;
-            text-align: left;
-            vertical-align: top;
-            white-space: normal;
-            word-wrap: break-word;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        tr, td, th {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
-        }
-
-        thead tr:first-child {
-            display: none;
-        }
-
-        @media print {
-            thead {
-                display: table-header-group;
-            }
-        }
-    </style>
-    """
-
-    html_tabela = tabela_visual.to_html(
+    html_tabela = tabela_visual_exibicao.to_html(
         escape=False,
         index_names=True
     )
@@ -226,12 +176,11 @@ else:
     html_final = f"""
     <html>
         <head>
-            <meta charset='UTF-8'>
-            {estilo_html_export}
+            <meta charset="UTF-8">
         </head>
         <body>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <img src="logo_sejus.png" alt="Logo SEJUS" style="height: 60px;">
+            <div style="display:flex;align-items:center;gap:15px;">
+                <img src="logo_sejus.png" style="height:60px;">
                 <h1>Monitoramento de TACs</h1>
             </div>
             {html_tabela}
@@ -240,31 +189,29 @@ else:
     """
 
     st.download_button(
-        label="📄 Gerar Arquivo para Impressão (PDF/HTML)",
-        data=html_final,
-        file_name="relatorio_tac.html",
-        mime="text/html"
+        "📄 Gerar Arquivo para Impressão (HTML)",
+        html_final,
+        "relatorio_tac.html",
+        "text/html"
     )
 
 
     # ======================================================
-    # GRÁFICO DE STATUS
+    # GRÁFICO
     # ======================================================
     col_status = tabela_para_exibir[
         ['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']
     ]
 
-    lista_empilhada = col_status.stack()
     lista_final = [
-        x for x in lista_empilhada
-        if x != '' and x != 'NÃO SE APLICA'
+        x for x in col_status.stack()
+        if x and x != 'NÃO SE APLICA'
     ]
 
     contagem = pd.Series(lista_final).value_counts()
     total_geral = len(lista_final)
 
-    col_esq, col_centro, col_dir = st.columns([1, 1, 1])
-
+    _, col_centro, _ = st.columns([1, 1, 1])
     with col_centro:
         fig, ax = plt.subplots(figsize=(3, 3))
         ax.pie(
@@ -278,14 +225,15 @@ else:
 
 
     # ======================================================
-    # TABELA FINAL (HTML ESTÁTICO)
+    # TABELA FINAL (APP)
     # ======================================================
     st.write("### 📋 Relatório")
 
-    html_tabela_site = tabela_visual.to_html(
-        escape=False,
-        classes="tabela-relatorio",
-        index_names=True
+    st.markdown(
+        tabela_visual_exibicao.to_html(
+            escape=False,
+            classes="tabela-relatorio",
+            index_names=True
+        ),
+        unsafe_allow_html=True
     )
-
-    st.markdown(html_tabela_site, unsafe_allow_html=True)
