@@ -133,34 +133,40 @@ else:
     # ======================================================
     st.markdown("""
     <style>
-        .tabela-relatorio {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10px;
-            table-layout: fixed;
-            background-color: white;
-            color: black;
-        }
+.tabela-relatorio {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    background-color: white;
+}
 
-        .tabela-relatorio th,
-        .tabela-relatorio td {
-            border: 1px solid #444;
-            padding: 8px;
-            vertical-align: top;
-            white-space: normal;
-            word-break: normal;
-            overflow-wrap: anywhere;
-            hyphens: auto;
-        }
+.tabela-relatorio th,
+.tabela-relatorio td {
+    padding: 10px 12px;
+    vertical-align: top;
 
-        .tabela-relatorio th {
-            font-weight: bold;
-            text-align: center;
-        }
+    /* Texto */
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
 
-        .tabela-relatorio thead tr:first-child {
-            display: none;
-        }
+    /* Fonte */
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.tabela-relatorio th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 2px solid #d1d5db;
+}
+
+.tabela-relatorio td {
+    border-bottom: 1px solid #e5e7eb;
+}
+
     </style>
     """, unsafe_allow_html=True)
 
