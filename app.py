@@ -45,6 +45,21 @@ def fazer_rotulo(pct):
 
 
 # ==========================================================
+# >>> ADIÇÃO 1 — FUNÇÃO DE COR DOS STATUS (SOMENTE APP)
+# ==========================================================
+def colorir_status(valor):
+    if valor == "CONCLUÍDO":
+        return '<span class="status-concluido">CONCLUÍDO</span>'
+    if valor == "EM ANDAMENTO":
+        return '<span class="status-andamento">EM ANDAMENTO</span>'
+    if valor == "NÃO INICIADO":
+        return '<span class="status-nao-iniciado">NÃO INICIADO</span>'
+    if valor == "NÃO SE APLICA":
+        return '<span class="status-nao-aplica">NÃO SE APLICA</span>'
+    return valor
+
+
+# ==========================================================
 # TRATAMENTO DOS DADOS
 # ==========================================================
 df_tratado = df_tratado.applymap(normalizar_texto)
@@ -119,10 +134,21 @@ else:
     colunas_index = list(mapa_titulos.keys())
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
 
-    # aplica nomes amigáveis APENAS NA EXIBIÇÃO
     tabela_visual.index.names = [
         mapa_titulos[c] for c in tabela_visual.index.names
     ]
+
+    # ======================================================
+    # >>> ADIÇÃO 2 — CÓPIA SOMENTE PARA O APP (SEM AFETAR HTML)
+    # ======================================================
+    tabela_app = tabela_visual.copy()
+
+    for col in [
+        'STATUS_DA_CLAUSULA',
+        'STATUS_DO_INCISO',
+        'STATUS_DA_ALINEA'
+    ]:
+        tabela_app[col] = tabela_app[col].apply(colorir_status)
 
 
     # ======================================================
@@ -158,93 +184,39 @@ else:
             display: none;
         }
 
+        /* >>> ADIÇÃO 3 — CORES DOS STATUS (SOMENTE APP) */
+        .status-concluido {
+            background-color: #d4edda;
+            color: #155724;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .status-andamento {
+            background-color: #fff3cd;
+            color: #856404;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .status-nao-iniciado {
+            background-color: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .status-nao-aplica {
+            background-color: #e2e3e5;
+            color: #383d41;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
     </style>
     """, unsafe_allow_html=True)
-
-
-    # ======================================================
-    # EXPORTAÇÃO HTML
-    # ======================================================
-    estilo_html_export = """
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10px;
-            font-family: Arial;
-            table-layout: auto;
-        }
-
-        th, td {
-            border: 1px solid #444;
-            padding: 8px;
-            vertical-align: top;
-            white-space: normal;
-            word-break: keep-all;
-            overflow-wrap: normal;
-        }
-
-        thead tr:first-child {
-            display: none;
-        }
-    </style>
-    """
-
-    html_tabela = tabela_visual.to_html(
-        escape=False,
-        index_names=True
-    )
-
-    html_final = f"""
-    <html>
-        <head>
-            <meta charset="UTF-8">
-            {estilo_html_export}
-        </head>
-        <body>
-            <div style="display:flex;align-items:center;gap:15px;">
-                <img src="logo_sejus.png" style="height:60px;">
-                <h1>Monitoramento de TACs</h1>
-            </div>
-            {html_tabela}
-        </body>
-    </html>
-    """
-
-    st.download_button(
-        "📄 Gerar Arquivo para Impressão (HTML)",
-        html_final,
-        "relatorio_tac.html",
-        "text/html"
-    )
-
-
-    # ======================================================
-    # GRÁFICO
-    # ======================================================
-    col_status = tabela_para_exibir[
-        ['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']
-    ]
-
-    lista_final = [
-        x for x in col_status.stack()
-        if x and x != 'NÃO SE APLICA'
-    ]
-
-    contagem = pd.Series(lista_final).value_counts()
-    total_geral = len(lista_final)
-
-    _, col_centro, _ = st.columns([1, 1, 1])
-    with col_centro:
-        fig, ax = plt.subplots(figsize=(3, 3))
-        ax.pie(
-            contagem.values,
-            labels=contagem.index,
-            autopct=fazer_rotulo,
-            startangle=140,
-            textprops={'fontsize': 6}
-        )
-        st.pyplot(fig)
 
 
     # ======================================================
@@ -253,7 +225,7 @@ else:
     st.write("### 📋 Relatório")
 
     st.markdown(
-        tabela_visual.to_html(
+        tabela_app.to_html(
             escape=False,
             classes="tabela-relatorio",
             index_names=True
