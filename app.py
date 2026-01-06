@@ -42,7 +42,7 @@ def estilizar_status(texto):
     
     if "CONCLUÍDO" in t or "CUMPRIDO" in t:
         bg = "#C6EFCE"  # Verde
-    elif "EM ANDAMENTO" in t:
+    elif "EM EXECUÇÃO" in t or "EM EXECUÇAO" in t or "EM EXECUCAO" in t:
         bg = "#FFEB9C"  # Amarelo
     elif "NÃO INICIADO" in t or "NAO INICIADO" in t or "ATRASADO" in t:
         bg = "#FFC7CE"  # Vermelho
