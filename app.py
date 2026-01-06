@@ -4,7 +4,7 @@
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
-import base64  # Necessário para embutir a logo no HTML
+import base64
 
 st.set_page_config(page_title="Monitoramento de TACs", layout="wide")
 st.title("Painel de Monitoramento de TACs")
@@ -21,7 +21,6 @@ url = (
 df = pd.read_csv(url)
 df_tratado = df.fillna('')
 
-# Funções Auxiliares
 def normalizar_texto(x):
     if isinstance(x, str):
         x = x.replace('\\n', '\n').replace('\r\n', '\n').replace('\r', '\n')
@@ -29,31 +28,25 @@ def normalizar_texto(x):
         x = ' '.join(x.split())
     return x
 
-# Aplica normalização
 df_tratado = df_tratado.applymap(normalizar_texto)
 
 def estilizar_status(texto):
     if not texto or not isinstance(texto, str):
         return texto
-    
     t = texto.upper().strip()
     bg = None
-    cor_fonte = "black"
-    
     if "CONCLUÍDO" in t or "CUMPRIDO" in t:
-        bg = "#C6EFCE"  # Verde
+        bg = "#C6EFCE"
     elif "EM EXECUÇÃO" in t or "EM EXECUÇAO" in t or "EM EXECUCAO" in t:
-        bg = "#FFEB9C"  # Amarelo
+        bg = "#FFEB9C"
     elif "NÃO INICIADO" in t or "NAO INICIADO" in t or "ATRASADO" in t:
-        bg = "#FFC7CE"  # Vermelho
+        bg = "#FFC7CE"
     elif "NÃO SE APLICA" in t or "NAO SE APLICA" in t:
-        bg = "#E7E7E7"  # Cinza
-    
+        bg = "#E7E7E7"
     if bg:
-        return f'<span style="background-color: {bg}; color: {cor_fonte}; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{texto}</span>'
+        return f'<span style="background-color: {bg}; color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{texto}</span>'
     return texto
 
-# Função para converter imagem para Base64 (para o HTML de download)
 def get_base64_image(image_path):
     try:
         with open(image_path, "rb") as img_file:
@@ -77,7 +70,6 @@ mapa_titulos = {
 lista_tacs = ['Todos'] + sorted(df_tratado['DOCUMENTO'].unique().tolist())
 lista_status = ['Todos'] + sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().tolist())
 
-# Logo na Sidebar (Visual do App)
 st.sidebar.image("logo_sejus.png", use_container_width=True)
 st.sidebar.header("Filtros")
 
@@ -126,19 +118,22 @@ else:
 
     # --- PREPARAÇÃO DA LOGO PARA DOWNLOAD ---
     logo_b64 = get_base64_image("logo_sejus.png")
-    if logo_b64:
-        logo_tag = f'<img src="data:image/png;base64,{logo_b64}" style="height:60px;">'
-    else:
-        logo_tag = "" # Caso o arquivo não seja encontrado, não quebra o código
+    logo_tag = f'<img src="data:image/png;base64,{logo_b64}" style="height:60px;">' if logo_b64 else ""
 
-    # Exportação HTML (Usa a tabela limpa e a logo embutida)
+    # REFORÇO NAS BORDAS DO HTML DE EXPORTAÇÃO
     estilo_html_export = """
     <style>
-        table { width: 100%; border-collapse: collapse; font-size: 10px; font-family: Arial; }
-        th, td { border: 1px solid #444; padding: 8px; vertical-align: top; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; font-family: Arial; margin-top: 20px; }
+        table, th, td { border: 1px solid black !important; } /* Força a borda preta em tudo */
+        th, td { padding: 8px; vertical-align: top; text-align: left; }
+        th { background-color: #f2f2f2; }
         thead tr:first-child { display: none; }
+        @media print {
+            body { -webkit-print-color-adjust: exact; }
+        }
     </style>
     """
+    
     html_tabela_download = tabela_print_visual.to_html(escape=False, index_names=True)
     html_final = f"""
     <html>
@@ -146,7 +141,7 @@ else:
         <body>
             <div style="display:flex;align-items:center;gap:15px;margin-bottom:20px;">
                 {logo_tag}
-                <h1>Monitoramento de TACs</h1>
+                <h1 style="font-family: Arial;">Monitoramento de TACs</h1>
             </div>
             {html_tabela_download}
         </body>
@@ -155,23 +150,16 @@ else:
 
     st.download_button("📄 Gerar Arquivo para Impressão (HTML)", html_final, "relatorio_tac.html", "text/html")
 
-    # Gráfico (DADOS ORIGINAIS)
+    # Gráfico
     col_status_graf = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
     lista_final = [x for x in col_status_graf.stack() if x and x != 'NÃO SE APLICA']
     
     if len(lista_final) > 0:
         contagem = pd.Series(lista_final).value_counts()
         total_geral = len(lista_final)
-
-        # DEFINIÇÃO DO MAPA DE CORES PARA O GRÁFICO
-        mapa_cores = {
-            "CONCLUÍDO": "#C6EFCE", "CUMPRIDO": "#C6EFCE",
-            "EM EXECUÇÃO": "#FFEB9C",
-            "NÃO INICIADO": "#FFC7CE", "NAO INICIADO": "#FFC7CE",
-            "NÃO SE APLICA": "#E7E7E7"
-        }
-        # Criamos a lista de cores baseada na ordem que aparece na contagem
+        mapa_cores = {"CONCLUÍDO": "#C6EFCE", "CUMPRIDO": "#C6EFCE", "EM EXECUÇÃO": "#FFEB9C", "NÃO INICIADO": "#FFC7CE", "NAO INICIADO": "#FFC7CE", "NÃO SE APLICA": "#E7E7E7"}
         cores_ordenadas = [mapa_cores.get(s.upper(), "#D3D3D3") for s in contagem.index]
+        
         def label_pizza(pct):
             val = int(round(total_geral / 100.0 * pct))
             return f"{pct:.1f}%\n({val} itens)"
@@ -179,20 +167,14 @@ else:
         _, col_centro, _ = st.columns([1, 1, 1])
         with col_centro:
             fig, ax = plt.subplots(figsize=(3, 3))
-            ax.pie(
-                contagem.values, 
-                labels=contagem.index, 
-                autopct=label_pizza, 
-                startangle=140, 
-                textprops={'fontsize': 6},
-                colors=cores_ordenadas  # AQUI APLICAMOS AS CORES
-            )
+            ax.pie(contagem.values, labels=contagem.index, autopct=label_pizza, startangle=140, textprops={'fontsize': 6}, colors=cores_ordenadas)
             st.pyplot(fig)
-    # Relatório no App (Com Cores)
+
+    # Relatório no App
     st.markdown("""<style>
         .tabela-relatorio { width: 100%; border-collapse: collapse; font-size: 10px; background-color: white; color: black; }
-        .tabela-relatorio th, .tabela-relatorio td { border: 1px solid #444; padding: 8px; vertical-align: top; }
-        .tabela-relatorio th { font-weight: bold; text-align: center; }
+        .tabela-relatorio th, .tabela-relatorio td { border: 1px solid #444 !important; padding: 8px; vertical-align: top; }
+        .tabela-relatorio th { font-weight: bold; text-align: center; background-color: #f2f2f2; }
         .tabela-relatorio thead tr:first-child { display: none; }
     </style>""", unsafe_allow_html=True)
     
