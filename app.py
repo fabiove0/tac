@@ -4,6 +4,7 @@
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
+import base64  # Necessário para embutir a logo no HTML
 
 st.set_page_config(page_title="Monitoramento de TACs", layout="wide")
 st.title("Painel de Monitoramento de TACs")
@@ -52,6 +53,14 @@ def estilizar_status(texto):
         return f'<span style="background-color: {bg}; color: {cor_fonte}; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{texto}</span>'
     return texto
 
+# Função para converter imagem para Base64 (para o HTML de download)
+def get_base64_image(image_path):
+    try:
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except:
+        return None
+
 # ==========================================================
 # 3. FILTROS E LÓGICA DE BUSCA
 # ==========================================================
@@ -68,6 +77,7 @@ mapa_titulos = {
 lista_tacs = ['Todos'] + sorted(df_tratado['DOCUMENTO'].unique().tolist())
 lista_status = ['Todos'] + sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().tolist())
 
+# Logo na Sidebar (Visual do App)
 st.sidebar.image("logo_sejus.png", use_container_width=True)
 st.sidebar.header("Filtros")
 
@@ -94,7 +104,7 @@ if termo_busca:
     tabela_para_exibir = tabela_para_exibir[mask]
 
 # ==========================================================
-# 4. EXIBIÇÃO E GRÁFICOS
+# 4. EXIBIÇÃO E DOWNLOAD
 # ==========================================================
 if len(tabela_para_exibir) == 0:
     st.warning("Nenhum dado encontrado com esse filtro.")
@@ -114,7 +124,14 @@ else:
     tabela_app_visual = tabela_app.set_index(colunas_index)
     tabela_app_visual.index.names = [mapa_titulos[c] for c in tabela_app_visual.index.names]
 
-    # Exportação HTML (Usa a tabela limpa)
+    # --- PREPARAÇÃO DA LOGO PARA DOWNLOAD ---
+    logo_b64 = get_base64_image("logo_sejus.png")
+    if logo_b64:
+        logo_tag = f'<img src="data:image/png;base64,{logo_b64}" style="height:60px;">'
+    else:
+        logo_tag = "" # Caso o arquivo não seja encontrado, não quebra o código
+
+    # Exportação HTML (Usa a tabela limpa e a logo embutida)
     estilo_html_export = """
     <style>
         table { width: 100%; border-collapse: collapse; font-size: 10px; font-family: Arial; }
@@ -123,11 +140,22 @@ else:
     </style>
     """
     html_tabela_download = tabela_print_visual.to_html(escape=False, index_names=True)
-    html_final = f"<html><head><meta charset='UTF-8'>{estilo_html_export}</head><body><h1>Monitoramento de TACs</h1>{html_tabela_download}</body></html>"
+    html_final = f"""
+    <html>
+        <head><meta charset='UTF-8'>{estilo_html_export}</head>
+        <body>
+            <div style="display:flex;align-items:center;gap:15px;margin-bottom:20px;">
+                {logo_tag}
+                <h1>Monitoramento de TACs</h1>
+            </div>
+            {html_tabela_download}
+        </body>
+    </html>
+    """
 
     st.download_button("📄 Gerar Arquivo para Impressão (HTML)", html_final, "relatorio_tac.html", "text/html")
 
-    # Gráfico
+    # Gráfico (DADOS ORIGINAIS)
     col_status_graf = tabela_para_exibir[['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']]
     lista_final = [x for x in col_status_graf.stack() if x and x != 'NÃO SE APLICA']
     
