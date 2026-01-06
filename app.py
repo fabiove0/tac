@@ -143,13 +143,25 @@ else:
     # ======================================================
     tabela_app = tabela_visual.copy()
 
-    for col in [
-        'STATUS_DA_CLAUSULA',
-        'STATUS_DO_INCISO',
-        'STATUS_DA_ALINEA'
-    ]:
-        tabela_app[col] = tabela_app[col].apply(colorir_status)
-
+    nomes_index = tabela_app.index.names
+    listas_index = []
+    
+    for nome in nomes_index:
+        valores = tabela_app.index.get_level_values(nome)
+    
+        if nome in [
+            'Status da Cláusula',
+            'Status do Inciso',
+            'Status da Alínea'
+        ]:
+            valores = [colorir_status(v) for v in valores]
+    
+        listas_index.append(valores)
+    
+    tabela_app.index = pd.MultiIndex.from_arrays(
+        listas_index,
+        names=nomes_index
+    )
 
     # ======================================================
     # CSS DA TABELA (APP)
