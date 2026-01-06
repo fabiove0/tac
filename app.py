@@ -43,6 +43,29 @@ def fazer_rotulo(pct):
     resultado = int(round(total_geral / 100.0 * pct))
     return f"{pct:.1f}%\n({resultado} itens)"
 
+def estilizar_status(texto):
+    if not texto or not isinstance(texto, str):
+        return texto
+    
+    texto_upper = texto.upper().strip()
+    cor = None
+    
+    # Define a cor baseada no conteúdo
+    if "CONCLUÍDO" in texto_upper or "CUMPRIDO" in texto_upper:
+        cor = "green"
+    elif "EM ANDAMENTO" in texto_upper:
+        cor = "#FFD700" # Amarelo/Dourado
+    elif "NÃO INICIADO" in texto_upper or "NAO INICIADO" in texto_upper:
+        cor = "red"
+    elif "NÃO SE APLICA" in texto_upper or "NAO SE APLICA" in texto_upper::
+        cor = "grey"
+    
+    # Se houver uma cor correspondente, aplica o sublinhado
+    if cor:
+        return f'<span style="text-decoration: underline; text-decoration-color: {cor}; text-decoration-thickness: 2px;">{texto}</span>'
+    
+    return texto
+
 
 # ==========================================================
 # TRATAMENTO DOS DADOS
@@ -116,6 +139,13 @@ if len(tabela_para_exibir) == 0:
     st.warning("Nenhum dado encontrado com esse filtro.")
 
 else:
+    tabela_visual_formatada = tabela_para_exibir.copy()
+    
+    colunas_status = ['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']
+    for col in colunas_status:
+        if col in tabela_visual_formatada.columns:
+            tabela_visual_formatada[col] = tabela_visual_formatada[col].apply(estilizar_status)
+    
     colunas_index = list(mapa_titulos.keys())
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
 
