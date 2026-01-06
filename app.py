@@ -30,7 +30,6 @@ df_tratado = df.fillna('')
 # FUNÇÕES AUXILIARES
 # ==========================================================
 def normalizar_texto(x):
-    """Normaliza textos da planilha"""
     if isinstance(x, str):
         x = x.replace('\\n', '\n')
         x = x.replace('\r\n', '\n')
@@ -41,7 +40,6 @@ def normalizar_texto(x):
 
 
 def fazer_rotulo(pct):
-    """Rótulo do gráfico de pizza"""
     resultado = int(round(total_geral / 100.0 * pct))
     return f"{pct:.1f}%\n({resultado} itens)"
 
@@ -53,7 +51,7 @@ df_tratado = df_tratado.applymap(normalizar_texto)
 
 
 # ==========================================================
-# MAPA DE TÍTULOS AMIGÁVEIS (APENAS VISUAL)
+# MAPA DE NOMES AMIGÁVEIS (APENAS VISUAL)
 # ==========================================================
 mapa_titulos = {
     'ANO': 'Ano',
@@ -121,52 +119,44 @@ else:
     colunas_index = list(mapa_titulos.keys())
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
 
-    # Aplica títulos amigáveis SOMENTE NA EXIBIÇÃO
-    tabela_visual_exibicao = tabela_visual.copy()
-    tabela_visual_exibicao.index.names = [
-        mapa_titulos.get(c, c) for c in tabela_visual.index.names
+    # aplica nomes amigáveis APENAS NA EXIBIÇÃO
+    tabela_visual.index.names = [
+        mapa_titulos[c] for c in tabela_visual.index.names
     ]
 
 
     # ======================================================
-    # CSS DA TABELA (TELA)
+    # CSS DA TABELA (APP)
     # ======================================================
     st.markdown("""
     <style>
-.tabela-relatorio {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: auto;
-    background-color: white;
-}
+        .tabela-relatorio {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            table-layout: auto;
+            background-color: white;
+            color: black;
+        }
 
-.tabela-relatorio th,
-.tabela-relatorio td {
-    padding: 10px 12px;
-    vertical-align: top;
+        .tabela-relatorio th,
+        .tabela-relatorio td {
+            border: 1px solid #444;
+            padding: 8px;
+            vertical-align: top;
+            white-space: normal;
+            word-break: keep-all;
+            overflow-wrap: normal;
+        }
 
-    /* Texto */
-    white-space: normal;
-    word-break: normal;
-    overflow-wrap: break-word;
+        .tabela-relatorio th {
+            font-weight: bold;
+            text-align: center;
+        }
 
-    /* Fonte */
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.tabela-relatorio th {
-    background-color: #f3f4f6;
-    font-weight: 600;
-    text-align: center;
-    border-bottom: 2px solid #d1d5db;
-}
-
-.tabela-relatorio td {
-    border-bottom: 1px solid #e5e7eb;
-}
-
+        .tabela-relatorio thead tr:first-child {
+            display: none;
+        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -174,7 +164,31 @@ else:
     # ======================================================
     # EXPORTAÇÃO HTML
     # ======================================================
-    html_tabela = tabela_visual_exibicao.to_html(
+    estilo_html_export = """
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            table-layout: auto;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 8px;
+            vertical-align: top;
+            white-space: normal;
+            word-break: keep-all;
+            overflow-wrap: normal;
+        }
+
+        thead tr:first-child {
+            display: none;
+        }
+    </style>
+    """
+
+    html_tabela = tabela_visual.to_html(
         escape=False,
         index_names=True
     )
@@ -183,6 +197,7 @@ else:
     <html>
         <head>
             <meta charset="UTF-8">
+            {estilo_html_export}
         </head>
         <body>
             <div style="display:flex;align-items:center;gap:15px;">
@@ -236,7 +251,7 @@ else:
     st.write("### 📋 Relatório")
 
     st.markdown(
-        tabela_visual_exibicao.to_html(
+        tabela_visual.to_html(
             escape=False,
             classes="tabela-relatorio",
             index_names=True
