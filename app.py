@@ -57,7 +57,7 @@ def estilizar_status(texto):
         cor = "#FFD700" # Amarelo/Dourado
     elif "NÃO INICIADO" in texto_upper or "NAO INICIADO" in texto_upper:
         cor = "red"
-    elif "NÃO SE APLICA" in texto_upper or "NAO SE APLICA" in texto_upper::
+    elif "NÃO SE APLICA" in texto_upper or "NAO SE APLICA" in texto_upper:
         cor = "grey"
     
     # Se houver uma cor correspondente, aplica o sublinhado
