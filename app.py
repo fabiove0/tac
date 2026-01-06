@@ -162,7 +162,16 @@ else:
     if len(lista_final) > 0:
         contagem = pd.Series(lista_final).value_counts()
         total_geral = len(lista_final)
-        
+
+        # DEFINIÇÃO DO MAPA DE CORES PARA O GRÁFICO
+        mapa_cores = {
+            "CONCLUÍDO": "#C6EFCE", "CUMPRIDO": "#C6EFCE",
+            "EM EXECUÇÃO": "#FFEB9C",
+            "NÃO INICIADO": "#FFC7CE", "NAO INICIADO": "#FFC7CE",
+            "NÃO SE APLICA": "#E7E7E7"
+        }
+        # Criamos a lista de cores baseada na ordem que aparece na contagem
+        cores_ordenadas = [mapa_cores.get(s.upper(), "#D3D3D3") for s in contagem.index]
         def label_pizza(pct):
             val = int(round(total_geral / 100.0 * pct))
             return f"{pct:.1f}%\n({val} itens)"
@@ -170,9 +179,15 @@ else:
         _, col_centro, _ = st.columns([1, 1, 1])
         with col_centro:
             fig, ax = plt.subplots(figsize=(3, 3))
-            ax.pie(contagem.values, labels=contagem.index, autopct=label_pizza, startangle=140, textprops={'fontsize': 6})
+            ax.pie(
+                contagem.values, 
+                labels=contagem.index, 
+                autopct=label_pizza, 
+                startangle=140, 
+                textprops={'fontsize': 6},
+                colors=cores_ordenadas  # AQUI APLICAMOS AS CORES
+            )
             st.pyplot(fig)
-
     # Relatório no App (Com Cores)
     st.markdown("""<style>
         .tabela-relatorio { width: 100%; border-collapse: collapse; font-size: 10px; background-color: white; color: black; }
