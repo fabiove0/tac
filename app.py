@@ -170,6 +170,7 @@ else:
             width: 100%;
             border-collapse: collapse;
             font-size: 10px;
+            font-family: Arial;
             table-layout: auto;
         }
 
@@ -185,28 +186,6 @@ else:
         thead tr:first-child {
             display: none;
         }
-        td:contains("CONCLUÍDO") {
-    background-color: #d4edda;
-    color: #155724;
-    font-weight: bold;
-}
-
-td:contains("EM ANDAMENTO") {
-    background-color: #fff3cd;
-    color: #856404;
-    font-weight: bold;
-}
-
-td:contains("NÃO INICIADO") {
-    background-color: #f8d7da;
-    color: #721c24;
-    font-weight: bold;
-}
-
-td:contains("NÃO SE APLICA") {
-    background-color: #e2e3e5;
-    color: #383d41;
-}
     </style>
     """
 
