@@ -130,11 +130,40 @@ else:
     # ======================================================
     st.markdown("""
     <style>
-            /* ===============================
-           CORES APENAS NAS COLUNAS DE STATUS
-           =============================== */
+        .tabela-relatorio {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            table-layout: auto;
+            background-color: white;
+            color: black;
+        }
+
+        .tabela-relatorio th,
+        .tabela-relatorio td {
+            border: 1px solid #444;
+            padding: 8px;
+            vertical-align: top;
+            white-space: normal;
+            word-break: keep-all;
+            overflow-wrap: normal;
+        }
+
+        .tabela-relatorio th {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .tabela-relatorio thead tr:first-child {
+            display: none;
+        }
+                /* ======================================================
+           CORES SOMENTE NAS COLUNAS DE STATUS (APP)
+           ====================================================== */
         
-        /* STATUS DA CLÁUSULA */
+        /* STATUS DA CLÁUSULA | INCISO | ALÍNEA */
+        
+        /* CONCLUÍDO */
         .tabela-relatorio tbody td:nth-child(5):contains("CONCLUÍDO"),
         .tabela-relatorio tbody td:nth-child(9):contains("CONCLUÍDO"),
         .tabela-relatorio tbody td:nth-child(13):contains("CONCLUÍDO") {
@@ -168,33 +197,7 @@ else:
             background-color: #e2e3e5;
             color: #383d41;
         }
-        .tabela-relatorio {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10px;
-            table-layout: auto;
-            background-color: white;
-            color: black;
-        }
 
-        .tabela-relatorio th,
-        .tabela-relatorio td {
-            border: 1px solid #444;
-            padding: 8px;
-            vertical-align: top;
-            white-space: normal;
-            word-break: keep-all;
-            overflow-wrap: normal;
-        }
-
-        .tabela-relatorio th {
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .tabela-relatorio thead tr:first-child {
-            display: none;
-        }
     </style>
     """, unsafe_allow_html=True)
 
