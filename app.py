@@ -216,7 +216,7 @@ div[data-testid="stMarkdownContainer"] table {
     html_tabela_site = tabela_visual.to_html(
     escape=False,
     classes="tabela-relatorio",
-    index_names=False
+    index_names=True
     )
 
 
