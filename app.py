@@ -170,7 +170,10 @@ div[data-testid="stMarkdownContainer"] table {
             {estilo_html_export}
         </head>
         <body>
-            <h2>Monitoramento de TACs</h2>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <img src="logo_sejus.png" alt="Logo SEJUS" style="height: 60px;">
+                <h1>Monitoramento de TACs</h1>
+            </div>
             {html_tabela}
         </body>
     </html>
