@@ -161,7 +161,7 @@ div[data-testid="stMarkdownContainer"] table {
 
     html_tabela = tabela_visual.to_html(
     escape=False,
-    index_names=False
+    index_names=True
     )
     html_final = f"""
     <html>
