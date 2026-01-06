@@ -39,7 +39,7 @@ if escolha_tac != 'Todos':
 
 if escolha_status != 'Todos':
     clausula_tem = tabela_para_exibir['STATUS_DA_CLAUSULA'] == escolha_status
-    inciso_tem = tabela_para_exibir['STATUS_DO_INCISO'] == esco lha_status
+    inciso_tem = tabela_para_exibir['STATUS_DO_INCISO'] == escolha_status
     alinea_tem = tabela_para_exibir['STATUS_DA_ALINEA'] == escolha_status
     tabela_para_exibir = tabela_para_exibir[clausula_tem | inciso_tem | alinea_tem]
 
