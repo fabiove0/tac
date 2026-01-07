@@ -47,23 +47,23 @@ def estilizar_status(texto):
         return texto
     
     t = texto.upper().strip()
-    cor = None
-    
-    # Define as cores do SUBLINHADO
+    bg = None
+    # Define as cores de sombreamento (marca-texto)
     if "CONCLUÍDO" in t or "CUMPRIDO" in t:
-        cor = "green"
+        bg = "#C6EFCE"  # Verde claro
     elif "EM EXECUÇÃO" in t or "EM EXECUÇAO" in t or "EM EXECUCAO" in t:
-        cor = "#FFD700"  # Amarelo/Dourado
+        bg = "#FFEB9C"  # Amarelo claro
     elif "NÃO INICIADO" in t or "NAO INICIADO" in t or "ATRASADO" in t:
-        cor = "red"
+        bg = "#FFC7CE"  # Vermelho claro
     elif "NÃO SE APLICA" in t or "NAO SE APLICA" in t:
-        cor = "grey"
-    
-    if cor:
-        # Usamos text-decoration para o efeito de sublinhado colorido
-        return f'<span style="text-decoration: underline; text-decoration-color: {cor}; text-decoration-thickness: 2px; text-underline-offset: 3px; font-weight: bold;">{texto}</span>'
-    
+        bg = "#E7E7E7"  # Cinza claro
+        
+    if bg:
+        return f'<span style="background-color: {bg}; color: {cor_fonte}; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{texto}</span>'
+        
     return texto
+
+
 
 # ==========================================================
 # TRATAMENTO DOS DADOS
