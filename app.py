@@ -301,9 +301,6 @@ else:
                         <div class="main-title">NÚCLEO DE GESTÃO ESTRATÉGICA PARA RESULTADOS - NGER</div>
                         <div class="sub-title">MONITORAMENTO DA EXECUÇÃO DO TERMO DE AJUSTAMENTO DE CONDUTA - TAC/SISPEN</div>
                     </td>
-                    <td class="date-container">
-                        COMPROMISSOS EXECUTADOS ATÉ 31/12/2024
-                    </td>
                 </tr>
             </table>
             
