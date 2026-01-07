@@ -255,6 +255,18 @@ else:
     # ======================================================
     # GRÁFICO
     # ======================================================
+    mapa_cores = {
+    "CONCLUÍDO": "#C6EFCE", 
+    "CUMPRIDO": "#C6EFCE",
+    "EM EXECUÇÃO": "#FFEB9C", 
+    "EM EXECUÇAO": "#FFEB9C",
+    "EM ANDAMENTO": "#FFEB9C",
+    "NÃO INICIADO": "#FFC7CE", 
+    "NAO INICIADO": "#FFC7CE",
+    "ATRASADO": "#FFC7CE",
+    "NÃO SE APLICA": "#E7E7E7"
+    }
+    
     col_status = tabela_para_exibir[
         ['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']
     ]
@@ -267,17 +279,20 @@ else:
     contagem = pd.Series(lista_final).value_counts()
     total_geral = len(lista_final)
 
+    cores_do_grafico = [mapa_cores.get(status.upper(), "#D3D3D3") for status in contagem.index]
+
+
     _, col_centro, _ = st.columns([1, 1, 1])
     with col_centro:
         fig, ax = plt.subplots(figsize=(3, 3))
         ax.pie(
-            contagem.values,
-            labels=contagem.index,
-            autopct=fazer_rotulo,
-            startangle=140,
-            textprops={'fontsize': 6}
+            contagem.values, 
+            labels=contagem.index, 
+            autopct=fazer_rotulo, 
+            startangle=140, 
+            textprops={'fontsize': 6},
+            colors=cores_do_grafico  
         )
-        st.pyplot(fig)
 
 
     # ======================================================
