@@ -224,29 +224,49 @@ else:
     # EXPORTAÇÃO HTML
     # ======================================================
     estilo_html_export = """
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10px;
-            font-family: Arial;
-            table-layout: auto;
-        }
+<style>
+    body { font-family: Arial, sans-serif; }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9px;
+        table-layout: auto;
+    }
+    th, td {
+        border: 1px solid #444;
+        padding: 6px;
+        vertical-align: top;
+    }
+    thead tr:first-child { display: none; }
 
-        th, td {
-            border: 1px solid #444;
-            padding: 8px;
-            vertical-align: top;
-            white-space: normal;
-            word-break: keep-all;
-            overflow-wrap: normal;
-        }
-
-        thead tr:first-child {
-            display: none;
-        }
-    </style>
-    """
+    /* Estilos do Cabeçalho Oficial */
+    .header-table {
+        width: 100%;
+        border: none !important;
+        margin-bottom: 5px;
+    }
+    .header-table td {
+        border: none !important;
+        vertical-align: middle;
+        padding: 0;
+    }
+    .logo-container { width: 20%; text-align: left; }
+    .titles-container { width: 60%; text-align: center; }
+    .date-container { width: 20%; text-align: right; font-size: 10px; }
+    
+    .main-title { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+    .sub-title { font-size: 13px; font-weight: normal; text-transform: uppercase; }
+    .methodology {
+        text-align: center;
+        font-size: 9px;
+        color: #333;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+    hr { border: 0; border-top: 1px solid #000; margin: 5px 0; }
+</style>
+"""
 
     html_tabela = tabela_print_visual.to_html(
         escape=False,
@@ -262,6 +282,11 @@ else:
     else:
         img_tag = ""  # Caso dê erro, o HTML não quebra, apenas fica sem logo
         
+    # Texto da metodologia exatamente como na imagem
+    texto_metodologia = """
+    Monitoramento realizado conforme a metodologia descrita no presente relatório: textos do TAC e aditivos foram integralmente convertidos e inseridos nesta planilha mantendo-se fielmente o teor dos instrumentos originais; cada compromisso (cláusulas, incisos e alíneas) foi monitorado individualmente por sua especificidade; compromissos repetidos foram mantidos para preservar a integridade e rastreabilidade das informações.
+    """
+    
     html_final = f"""
     <html>
         <head>
@@ -269,10 +294,25 @@ else:
             {estilo_html_export}
         </head>
         <body>
-            <div style="display:flex;align-items:center;gap:15px;">
-                {img_tag}
-                <h1>Monitoramento de TACs</h1>
+            <table class="header-table">
+                <tr>
+                    <td class="logo-container">{img_tag}</td>
+                    <td class="titles-container">
+                        <div class="main-title">NÚCLEO DE GESTÃO ESTRATÉGICA PARA RESULTADOS - NGER</div>
+                        <div class="sub-title">MONITORAMENTO DA EXECUÇÃO DO TERMO DE AJUSTAMENTO DE CONDUTA - TAC/SISPEN</div>
+                    </td>
+                    <td class="date-container">
+                        COMPROMISSOS EXECUTADOS ATÉ 31/12/2024
+                    </td>
+                </tr>
+            </table>
+            
+            <hr>
+            
+            <div class="methodology">
+                {texto_metodologia}
             </div>
+    
             {html_tabela}
         </body>
     </html>
