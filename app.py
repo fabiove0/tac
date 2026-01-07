@@ -120,7 +120,7 @@ st.sidebar.markdown("""
         </div>
         <div style="font-size: 11px; font-weight: 600; opacity: 0.8;">
             Equipe: Amanda L. B. Silva, Ana C. P. Silva, Bernardo M. Filho, 
-            Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia /n nger@sejus.mt.gov.br
+            Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia nger@sejus.mt.gov.br
         </div>
         <div style="margin-top: 10px; font-size: 11px; border-top: 1px dotted #88888855; padding-top: 8px;">
             Desenvolvedor: Fabio V. Lima
