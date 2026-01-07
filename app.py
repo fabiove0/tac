@@ -4,6 +4,7 @@
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
+import base64
 
 
 # ==========================================================
@@ -63,7 +64,14 @@ def estilizar_status(texto):
     if bg:
         return f'<span style="background-color: {bg}; color: {cor_fonte}; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{texto}</span>'
     return texto
-
+def converter_imagem_para_base64(caminho_da_imagem):
+    try:
+        with open(caminho_da_imagem, "rb") as arquivo_imagem:
+            # Transforma os bytes da imagem em uma string de texto Base64
+            conteudo = arquivo_imagem.read()
+            return base64.b64encode(conteudo).decode()
+    except Exception as e:
+        return None
 
 
 # ==========================================================
@@ -228,6 +236,15 @@ else:
         index_names=True
     )
 
+    # 1. Busca a imagem e converte (certifique-se de que o nome do arquivo está igual ao do GitHub)
+    logo_base64 = converter_imagem_para_base64("logo_sejus.png")
+
+    # 2. Cria a tag de imagem apenas se a conversão deu certo
+    if logo_base64:
+        img_tag = f'<img src="data:image/png;base64,{logo_base64}" style="height: 60px;">'
+    else:
+        img_tag = ""  # Caso dê erro, o HTML não quebra, apenas fica sem logo
+        
     html_final = f"""
     <html>
         <head>
@@ -236,7 +253,7 @@ else:
         </head>
         <body>
             <div style="display:flex;align-items:center;gap:15px;">
-                <img src="logo_sejus.png" style="height:60px;">
+                {img_tag}
                 <h1>Monitoramento de TACs</h1>
             </div>
             {html_tabela}
