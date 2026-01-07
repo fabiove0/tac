@@ -240,29 +240,43 @@ else:
     thead tr:first-child { display: none; }
 
     /* Estilos do Cabeçalho Oficial */
+    /* Estilos do Cabeçalho Oficial Corrigidos */
     .header-table {
         width: 100%;
         border: none !important;
-        margin-bottom: 5px;
+        border-collapse: collapse;
+        margin-bottom: 10px;
     }
     .header-table td {
         border: none !important;
         vertical-align: middle;
         padding: 0;
     }
-    .logo-container { width: 20%; text-align: left; }
-    .titles-container { width: 60%; text-align: center; }
-    .date-container { width: 20%; text-align: right; font-size: 10px; }
+    /* Definindo larguras iguais para os lados para centralizar o meio */
+    .logo-container { 
+        width: 20%; 
+        text-align: left; 
+    }
+    .titles-container { 
+        width: 60%; 
+        text-align: center; 
+    }
+    .date-container { 
+        width: 20%; 
+        text-align: right; 
+        font-size: 9px; 
+        font-weight: bold;
+        line-height: 1.2;
+    }
     
-    .main-title { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
-    .sub-title { font-size: 13px; font-weight: normal; text-transform: uppercase; }
-    .methodology {
-        text-align: center;
-        font-size: 9px;
-        color: #333;
-        margin-top: 10px;
-        margin-bottom: 15px;
-        line-height: 1.4;
+    .main-title { 
+        font-size: 15px; 
+        font-weight: bold; 
+        margin-bottom: 2px; 
+    }
+    .sub-title { 
+        font-size: 12px; 
+        font-weight: normal; 
     }
     hr { border: 0; border-top: 1px solid #000; margin: 5px 0; }
 </style>
@@ -283,6 +297,7 @@ else:
         img_tag = ""  # Caso dê erro, o HTML não quebra, apenas fica sem logo
         
     # Texto da metodologia exatamente como na imagem
+    # Texto da metodologia
     texto_metodologia = """
     Monitoramento realizado conforme a metodologia descrita no presente relatório: textos do TAC e aditivos foram integralmente convertidos e inseridos nesta planilha mantendo-se fielmente o teor dos instrumentos originais; cada compromisso (cláusulas, incisos e alíneas) foi monitorado individualmente por sua especificidade; compromissos repetidos foram mantidos para preservar a integridade e rastreabilidade das informações.
     """
@@ -296,15 +311,20 @@ else:
         <body>
             <table class="header-table">
                 <tr>
-                    <td class="logo-container">{img_tag}</td>
+                    <td class="logo-container">
+                        {img_tag}
+                    </td>
                     <td class="titles-container">
                         <div class="main-title">NÚCLEO DE GESTÃO ESTRATÉGICA PARA RESULTADOS - NGER</div>
                         <div class="sub-title">MONITORAMENTO DA EXECUÇÃO DO TERMO DE AJUSTAMENTO DE CONDUTA - TAC/SISPEN</div>
                     </td>
+                    <td class="date-container">
+                        COMPROMISSOS<br>EXECUTADOS ATÉ<br>31/12/2024
+                    </td>
                 </tr>
             </table>
             
-            <hr>
+            <hr style="border: 0.5px solid #000;">
             
             <div class="methodology">
                 {texto_metodologia}
