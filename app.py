@@ -110,7 +110,7 @@ lista_status = ['Todos'] + sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().toli
 st.sidebar.image("logo_sejus.png", use_container_width=True)
 st.sidebar.header("Filtros")
 st.sidebar.header("NGER- Núcleo de Gestão Estratégica de Resultados")
-st.sidebar.subheader("Equipe (Amanda L. B. Silva, Ana C. P. Silva, Bernardo M. Filho, Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia) \n Desenvolvedor: Fabio V. Lima"
+st.sidebar.subheader("Equipe (Amanda L. B. Silva, Ana C. P. Silva, Bernardo M. Filho, Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia) \n Desenvolvedor: Fabio V. Lima")
 
 
 
