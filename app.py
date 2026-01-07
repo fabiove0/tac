@@ -239,8 +239,7 @@ else:
     }
     thead tr:first-child { display: none; }
 
-    /* Estilos do Cabeçalho Oficial */
-    /* Estilos do Cabeçalho Oficial Corrigidos */
+    /* Cabeçalho Oficial */
     .header-table {
         width: 100%;
         border: none !important;
@@ -252,34 +251,41 @@ else:
         vertical-align: middle;
         padding: 0;
     }
-    /* Definindo larguras iguais para os lados para centralizar o meio */
-    .logo-container { 
-        width: 20%; 
-        text-align: left; 
-    }
+
+    .logo-container { width: 20%; text-align: left; }
+    
     .titles-container { 
         width: 60%; 
         text-align: center; 
     }
+
+    /* Estilo preservado conforme solicitado */
     .date-container { 
-        text-align: center;
+        width: 20%;
+        text-align: right; /* Ajustado para alinhar à direita no topo */
         font-size: 9px;
         color: #333;
-        margin-top: 10px;
-        margin-bottom: 15px;
         line-height: 1.4;
         font-style: italic;
     }
     
+    /* Ajuste do Cabeçalho Principal */
     .main-title { 
-        font-size: 15px; 
-        font-weight: bold; 
-        margin-bottom: 2px; 
+        font-size: 16px; 
+        font-weight: 800; /* Mais negrito */
+        letter-spacing: 0.5px;
+        margin-bottom: 4px; 
+        color: #000;
     }
+    
+    /* Ajuste do Sub Cabeçalho */
     .sub-title { 
         font-size: 12px; 
-        font-weight: normal; 
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #222;
     }
+
     .methodology {
         text-align: center;
         font-size: 9px;
