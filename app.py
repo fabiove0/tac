@@ -136,7 +136,7 @@ if termo_busca:
 if len(tabela_para_exibir) == 0:
     st.warning("Nenhum dado encontrado com esse filtro.")
 
-else
+else:
     # --- 1. PREPARAÇÃO DA TABELA PARA O APP (COM CORES) ---
     tabela_visual = tabela_para_exibir.copy()
     colunas_status = ['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']
