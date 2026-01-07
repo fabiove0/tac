@@ -286,7 +286,7 @@ else:
     st.write("### 📋 Relatório")
 
     st.markdown(
-        tabela_visual_estilizada.to_html(
+        tabela_visual.to_html(
             escape=False,
             classes="tabela-relatorio",
             index_names=True
