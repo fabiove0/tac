@@ -264,7 +264,7 @@ else:
     }
 
     .titles-container { 
-        width: 80%; 
+        width: 60%; 
         text-align: center; 
     }
 
@@ -277,7 +277,10 @@ else:
         line-height: 1.4;
         font-style: italic;
     }
-
+    
+    .spacer-container { 
+        width: 20%; 
+    }
     
 
     .main-title { 
@@ -343,6 +346,8 @@ else:
                         <div class="main-title">NÚCLEO DE GESTÃO ESTRATÉGICA PARA RESULTADOS - NGER</div>
                         <div class="sub-title">MONITORAMENTO DA EXECUÇÃO DO TERMO DE AJUSTAMENTO DE CONDUTA - TAC/SISPEN</div>
                     </td>
+                    <td class="spacer-container">
+                        </td>
                 </tr>
             </table>
             
