@@ -42,7 +42,28 @@ def normalizar_texto(x):
 def fazer_rotulo(pct):
     resultado = int(round(total_geral / 100.0 * pct))
     return f"{pct:.1f}%\n({resultado} itens)"
-
+def estilizar_status(texto):
+    if not texto or not isinstance(texto, str):
+        return texto
+    
+    t = texto.upper().strip()
+    bg = None
+    cor_fonte = "black"
+    
+    # Define as cores de sombreamento (marca-texto)
+    if "CONCLUÍDO" in t or "CUMPRIDO" in t:
+        bg = "#C6EFCE"  # Verde claro
+    elif "EM EXECUÇÃO" in t or "EM EXECUÇAO" in t or "EM EXECUCAO" in t:
+        bg = "#FFEB9C"  # Amarelo claro
+    elif "NÃO INICIADO" in t or "NAO INICIADO" in t or "ATRASADO" in t:
+        bg = "#FFC7CE"  # Vermelho claro
+    elif "NÃO SE APLICA" in t or "NAO SE APLICA" in t:
+        bg = "#E7E7E7"  # Cinza claro
+    
+    if bg:
+        return f'<span style="background-color: {bg}; color: {cor_fonte}; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{texto}</span>'
+    
+    return texto
 
 # ==========================================================
 # TRATAMENTO DOS DADOS
@@ -115,7 +136,14 @@ if termo_busca:
 if len(tabela_para_exibir) == 0:
     st.warning("Nenhum dado encontrado com esse filtro.")
 
-else:
+else
+    # --- 1. PREPARAÇÃO DA TABELA PARA O APP (COM CORES) ---
+    tabela_visual = tabela_para_exibir.copy()
+    colunas_status = ['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']
+    for col in colunas_status:
+        if col in tabela_visual.columns:
+            tabela_visual[col] = tabela_visual[col].apply(estilizar_status)
+            
     colunas_index = list(mapa_titulos.keys())
     tabela_visual = tabela_para_exibir.set_index(colunas_index)
 
@@ -123,7 +151,10 @@ else:
     tabela_visual.index.names = [
         mapa_titulos[c] for c in tabela_visual.index.names
     ]
-
+    
+    # --- 2. PREPARAÇÃO DA TABELA PARA DOWNLOAD (LIMPA) ---
+    tabela_print_visual = tabela_para_exibir.set_index(colunas_index)
+    tabela_print_visual.index.names = [mapa_titulos[c] for c in tabela_print_visual.index.names]
 
     # ======================================================
     # CSS DA TABELA (APP)
@@ -190,7 +221,7 @@ else:
     </style>
     """
 
-    html_tabela = tabela_visual.to_html(
+    html_tabela = tabela_print_visual.to_html(
         escape=False,
         index_names=True
     )
