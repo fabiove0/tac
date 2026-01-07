@@ -42,25 +42,26 @@ def normalizar_texto(x):
 def fazer_rotulo(pct):
     resultado = int(round(total_geral / 100.0 * pct))
     return f"{pct:.1f}%\n({resultado} itens)"
+    
 def estilizar_status(texto):
     if not texto or not isinstance(texto, str):
         return texto
     
     t = texto.upper().strip()
     bg = None
-    # Define as cores de sombreamento (marca-texto)
+    cor_fonte = "black" # Define um padrão para evitar NameError
+    
     if "CONCLUÍDO" in t or "CUMPRIDO" in t:
-        bg = "#C6EFCE"  # Verde claro
-    elif "EM EXECUÇÃO" in t or "EM EXECUÇAO" in t or "EM EXECUCAO" in t:
-        bg = "#FFEB9C"  # Amarelo claro
+        bg = "#C6EFCE"; cor_fonte = "#006100"
+    elif "EM EXECUÇÃO" in t or "EM EXECUÇAO" in t or "EM EXECUCAO" in t or "EM ANDAMENTO" in t:
+        bg = "#FFEB9C"; cor_fonte = "#9C6500"
     elif "NÃO INICIADO" in t or "NAO INICIADO" in t or "ATRASADO" in t:
-        bg = "#FFC7CE"  # Vermelho claro
+        bg = "#FFC7CE"; cor_fonte = "#9C0006"
     elif "NÃO SE APLICA" in t or "NAO SE APLICA" in t:
-        bg = "#E7E7E7"  # Cinza claro
-        
+        bg = "#E7E7E7"; cor_fonte = "#333333"
+    
     if bg:
         return f'<span style="background-color: {bg}; color: {cor_fonte}; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{texto}</span>'
-        
     return texto
 
 
