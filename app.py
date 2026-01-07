@@ -152,7 +152,7 @@ else:
     tabela_visual = tabela_visual_estilizada.set_index(colunas_index)
 
     # Aplica nomes amigáveis
-    tabela_visual.index.names = [mapa_titulos[c] for c in tabela_visual.index.names]
+    tabela_visual_estilizada.index.names = [mapa_titulos[c] for c in tabela_visual.index.names]
     
     # --- 2. PREPARAÇÃO DA TABELA PARA DOWNLOAD (LIMPA) ---
     # Para o download, usamos a original (sem HTML) para o arquivo não vir "sujo"
