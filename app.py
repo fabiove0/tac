@@ -262,11 +262,13 @@ else:
         text-align: center; 
     }
     .date-container { 
-        width: 20%; 
-        text-align: right; 
-        font-size: 9px; 
-        font-weight: bold;
-        line-height: 1.2;
+        text-align: center;
+        font-size: 9px;
+        color: #333;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        line-height: 1.4;
+        font-style: italic;
     }
     
     .main-title { 
@@ -309,6 +311,9 @@ else:
     texto_metodologia = """
     Monitoramento realizado conforme a metodologia descrita no presente relatório: textos do TAC e aditivos foram integralmente convertidos e inseridos nesta planilha mantendo-se fielmente o teor dos instrumentos originais; cada compromisso (cláusulas, incisos e alíneas) foi monitorado individualmente por sua especificidade; compromissos repetidos foram mantidos para preservar a integridade e rastreabilidade das informações.
     """
+    texto_equipe = """
+    Equipe (Amanda L. B. Silva, Ana C. P. Silva, Bernardo M. Filho, Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia) | Desenvolvedor: Fabio V. Lima
+    """
     
     html_final = f"""
     <html>
@@ -326,13 +331,14 @@ else:
                         <div class="main-title">NÚCLEO DE GESTÃO ESTRATÉGICA PARA RESULTADOS - NGER</div>
                         <div class="sub-title">MONITORAMENTO DA EXECUÇÃO DO TERMO DE AJUSTAMENTO DE CONDUTA - TAC/SISPEN</div>
                     </td>
-                    <td class="date-container">
-                        COMPROMISSOS<br>EXECUTADOS ATÉ<br>31/12/2024
-                    </td>
                 </tr>
             </table>
             
             <hr style="border: 0.5px solid #000;">
+
+            <div class="date-container">
+                {texto_equipe}
+            </div>
             
             <div class="methodology">
                 {texto_metodologia}
