@@ -109,13 +109,20 @@ lista_status = ['Todos'] + sorted(df_tratado['STATUS_DA_CLAUSULA'].unique().toli
 
 st.sidebar.image("logo_sejus.png", use_container_width=True)
 st.sidebar.header("Filtros")
-st.sidebar.header("NGER- Núcleo de Gestão Estratégica de Resultados")
-st.sidebar.subheader("Equipe (Amanda L. B. Silva, Ana C. P. Silva, Bernardo M. Filho, Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia) \n Desenvolvedor: Fabio V. Lima")
-
-
 
 escolha_tac = st.sidebar.selectbox("Selecione o Documento:", lista_tacs)
 escolha_status = st.sidebar.selectbox("Selecione o Status:", lista_status)
+st.sidebar.write("---")
+st.sidebar.markdown(f"""
+    <div style="font-size: 11px; line-height: 1.4; color: #888;">
+        <strong style="color: #bbb;">NGER - Núcleo de Gestão Estratégica de Resultados</strong><br>
+        Equipe (Amanda L. B. Silva, Ana C. P. Silva, Bernardo M. Filho, Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia)<br>
+        <hr style="margin: 8px 0; border: 0.1px solid #333;">
+        <span>Desenvolvedor: Fabio V. Lima</span>
+    </div>
+""", unsafe_allow_html=True)
+
+
 termo_busca = st.text_input("🔍 Filtrar tabela por termo:", "")
 
 
