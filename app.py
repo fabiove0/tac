@@ -278,6 +278,14 @@ else:
         font-size: 12px; 
         font-weight: normal; 
     }
+    .methodology {
+        text-align: center;
+        font-size: 9px;
+        color: #333;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
     hr { border: 0; border-top: 1px solid #000; margin: 5px 0; }
 </style>
 """
