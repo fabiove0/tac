@@ -224,7 +224,7 @@ else:
     # EXPORTAÇÃO HTML
     # ======================================================
     estilo_html_export = """
-<style>
+    <style>
     body { font-family: Arial, sans-serif; }
     table {
         width: 100%;
@@ -232,60 +232,65 @@ else:
         font-size: 9px;
         table-layout: auto;
     }
+
     th, td {
         border: 1px solid #444;
         padding: 6px;
         vertical-align: top;
     }
-    thead tr:first-child { display: none; }
 
-    /* Cabeçalho Oficial */
+    thead tr:first-child { display: none; }
+    /* Estilos do Cabeçalho Oficial */
     .header-table {
         width: 100%;
         border: none !important;
         border-collapse: collapse;
         margin-bottom: 10px;
+
     }
+
     .header-table td {
         border: none !important;
         vertical-align: middle;
         padding: 0;
+
     }
 
-    .logo-container { width: 20%; text-align: left; }
-    
+    /* Definindo larguras iguais para os lados para centralizar o meio */
+
+    .logo-container { 
+        width: 20%; 
+        text-align: left; 
+    }
+
     .titles-container { 
-        width: 60%; 
+        width: 80%; 
         text-align: center; 
     }
 
-    /* Estilo preservado conforme solicitado */
     .date-container { 
-        width: 20%;
-        text-align: right; /* Ajustado para alinhar à direita no topo */
+        text-align: center;
         font-size: 9px;
         color: #333;
+        margin-top: 10px;
+        margin-bottom: 15px;
         line-height: 1.4;
         font-style: italic;
     }
+
     
-    /* Ajuste do Cabeçalho Principal */
+
     .main-title { 
-        font-size: 16px; 
-        font-weight: 800; /* Mais negrito */
-        letter-spacing: 0.5px;
-        margin-bottom: 4px; 
-        color: #000;
-    }
-    
-    /* Ajuste do Sub Cabeçalho */
-    .sub-title { 
-        font-size: 12px; 
-        font-weight: 600;
-        text-transform: uppercase;
-        color: #222;
+
+        font-size: 15px; 
+        font-weight: bold; 
+        margin-bottom: 2px; 
     }
 
+    .sub-title { 
+        font-size: 12px; 
+        font-weight: normal; 
+    }
     .methodology {
         text-align: center;
         font-size: 9px;
@@ -295,6 +300,7 @@ else:
         line-height: 1.4;
     }
     hr { border: 0; border-top: 1px solid #000; margin: 5px 0; }
+
 </style>
 """
 
