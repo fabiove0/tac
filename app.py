@@ -47,21 +47,21 @@ def estilizar_status(texto):
         return texto
     
     t = texto.upper().strip()
-    bg = None
-    cor_fonte = "black"
+    cor = None
     
-    # Define as cores de sombreamento (marca-texto)
+    # Define as cores do SUBLINHADO
     if "CONCLUÍDO" in t or "CUMPRIDO" in t:
-        bg = "#C6EFCE"  # Verde claro
+        cor = "green"
     elif "EM EXECUÇÃO" in t or "EM EXECUÇAO" in t or "EM EXECUCAO" in t:
-        bg = "#FFEB9C"  # Amarelo claro
+        cor = "#FFD700"  # Amarelo/Dourado
     elif "NÃO INICIADO" in t or "NAO INICIADO" in t or "ATRASADO" in t:
-        bg = "#FFC7CE"  # Vermelho claro
+        cor = "red"
     elif "NÃO SE APLICA" in t or "NAO SE APLICA" in t:
-        bg = "#E7E7E7"  # Cinza claro
+        cor = "grey"
     
-    if bg:
-        return f'<span style="background-color: {bg}; color: {cor_fonte}; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{texto}</span>'
+    if cor:
+        # Usamos text-decoration para o efeito de sublinhado colorido
+        return f'<span style="text-decoration: underline; text-decoration-color: {cor}; text-decoration-thickness: 2px; text-underline-offset: 3px; font-weight: bold;">{texto}</span>'
     
     return texto
 
@@ -138,21 +138,23 @@ if len(tabela_para_exibir) == 0:
 
 else:
     # --- 1. PREPARAÇÃO DA TABELA PARA O APP (COM CORES) ---
-    tabela_visual = tabela_para_exibir.copy()
+    # Criamos uma cópia para aplicar a estilização
+    tabela_visual_estilizada = tabela_para_exibir.copy()
+    
     colunas_status = ['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']
     for col in colunas_status:
-        if col in tabela_visual.columns:
-            tabela_visual[col] = tabela_visual[col].apply(estilizar_status)
-            
+        if col in tabela_visual_estilizada.columns:
+            tabela_visual_estilizada[col] = tabela_visual_estilizada[col].apply(estilizar_status)
+    
+    # AGORA criamos o índice usando a tabela que já recebeu o HTML das cores
     colunas_index = list(mapa_titulos.keys())
-    tabela_visual = tabela_para_exibir.set_index(colunas_index)
+    tabela_visual = tabela_visual_estilizada.set_index(colunas_index)
 
-    # aplica nomes amigáveis APENAS NA EXIBIÇÃO
-    tabela_visual.index.names = [
-        mapa_titulos[c] for c in tabela_visual.index.names
-    ]
+    # Aplica nomes amigáveis
+    tabela_visual.index.names = [mapa_titulos[c] for c in tabela_visual.index.names]
     
     # --- 2. PREPARAÇÃO DA TABELA PARA DOWNLOAD (LIMPA) ---
+    # Para o download, usamos a original (sem HTML) para o arquivo não vir "sujo"
     tabela_print_visual = tabela_para_exibir.set_index(colunas_index)
     tabela_print_visual.index.names = [mapa_titulos[c] for c in tabela_print_visual.index.names]
 
@@ -284,7 +286,7 @@ else:
     st.write("### 📋 Relatório")
 
     st.markdown(
-        tabela_visual.to_html(
+        tabela_visual_estilizada.to_html(
             escape=False,
             classes="tabela-relatorio",
             index_names=True
