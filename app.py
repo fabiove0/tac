@@ -293,7 +293,7 @@ else:
             textprops={'fontsize': 6},
             colors=cores_do_grafico  
         )
-
+        st.pyplot(fig)
 
     # ======================================================
     # TABELA FINAL (APP)
