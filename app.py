@@ -139,7 +139,6 @@ if len(tabela_para_exibir) == 0:
 
 else:
     # --- 1. PREPARAÇÃO DA TABELA PARA O APP (COM CORES) ---
-    # Criamos uma cópia para aplicar a estilização
     tabela_visual_estilizada = tabela_para_exibir.copy()
     
     colunas_status = ['STATUS_DA_CLAUSULA', 'STATUS_DO_INCISO', 'STATUS_DA_ALINEA']
@@ -147,15 +146,15 @@ else:
         if col in tabela_visual_estilizada.columns:
             tabela_visual_estilizada[col] = tabela_visual_estilizada[col].apply(estilizar_status)
     
-    # AGORA criamos o índice usando a tabela que já recebeu o HTML das cores
     colunas_index = list(mapa_titulos.keys())
+    
+    # Criamos a tabela_visual (esta sim terá os 14 índices)
     tabela_visual = tabela_visual_estilizada.set_index(colunas_index)
 
-    # Aplica nomes amigáveis
-    tabela_visual_estilizada.index.names = [mapa_titulos[c] for c in tabela_visual.index.names]
+    # CORREÇÃO AQUI: Aplicar os nomes na tabela_visual, não na estilizada
+    tabela_visual.index.names = [mapa_titulos[c] for c in tabela_visual.index.names]
     
     # --- 2. PREPARAÇÃO DA TABELA PARA DOWNLOAD (LIMPA) ---
-    # Para o download, usamos a original (sem HTML) para o arquivo não vir "sujo"
     tabela_print_visual = tabela_para_exibir.set_index(colunas_index)
     tabela_print_visual.index.names = [mapa_titulos[c] for c in tabela_print_visual.index.names]
 
