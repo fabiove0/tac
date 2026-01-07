@@ -114,11 +114,12 @@ escolha_tac = st.sidebar.selectbox("Selecione o Documento:", lista_tacs)
 escolha_status = st.sidebar.selectbox("Selecione o Status:", lista_status)
 st.sidebar.write("---")
 st.sidebar.markdown(f"""
-    <div style="font-size: 11px; line-height: 1.4; color: #888;">
-        <strong style="color: #bbb;">NGER - Núcleo de Gestão Estratégica de Resultados</strong><br>
+    <div style="font-size: 12px; line-height: 1.5; color: #FFFFFF; font-weight: 700;">
+        <span style="color: #FFD700; font-size: 13px;">NGER - Núcleo de Gestão Estratégica de Resultados</span><br>
         Equipe (Amanda L. B. Silva, Ana C. P. Silva, Bernardo M. Filho, Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia)<br>
-        <hr style="margin: 8px 0; border: 0.1px solid #333;">
-        <span>Desenvolvedor: Fabio V. Lima</span>
+        <div style="margin-top: 8px; border-top: 1px solid #555; padding-top: 8px;">
+            Desenvolvedor: Fabio V. Lima
+        </div>
     </div>
 """, unsafe_allow_html=True)
 
