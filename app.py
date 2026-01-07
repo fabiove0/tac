@@ -113,11 +113,17 @@ st.sidebar.header("Filtros")
 escolha_tac = st.sidebar.selectbox("Selecione o Documento:", lista_tacs)
 escolha_status = st.sidebar.selectbox("Selecione o Status:", lista_status)
 st.sidebar.write("---")
-st.sidebar.markdown(f"""
-    <div style="font-size: 12px; line-height: 1.5; color: #FFFFFF; font-weight: 700;">
-        <span style="color: #FFD700; font-size: 13px;">NGER - Núcleo de Gestão Estratégica de Resultados</span><br>
-        Equipe (Amanda L. B. Silva, Ana C. P. Silva, Bernardo M. Filho, Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia)<br>
-        <div style="margin-top: 8px; border-top: 1px solid #555; padding-top: 8px;">
+st.sidebar.markdown("""
+    <hr style="margin: 10px 0; border: 0.5px solid #88888855;">
+    <div style="line-height: 1.6; font-weight: 700;">
+        <div style="font-size: 13px; margin-bottom: 5px;">
+            NGER - Núcleo de Gestão Estratégica para Resultados
+        </div>
+        <div style="font-size: 11px; font-weight: 600; opacity: 0.8;">
+            Equipe: Amanda L. B. Silva, Ana C. P. Silva, Bernardo M. Filho, 
+            Daiane B. Fernandes, Débora F. Pimenta e Nicole Garcia
+        </div>
+        <div style="margin-top: 10px; font-size: 11px; border-top: 1px dotted #88888855; padding-top: 8px;">
             Desenvolvedor: Fabio V. Lima
         </div>
     </div>
