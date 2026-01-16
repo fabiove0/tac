@@ -447,7 +447,7 @@ else:
         )
         st.pyplot(fig)
     with col2:
-        fig_barra, ax_barra = plt.subplots(figsize=(4, 1))
+        fig_barra, ax_barra = plt.subplots(figsize=(6, 3))
     
         bottom = None
     
@@ -486,7 +486,7 @@ else:
         ax_barra.set_yticks([])
         ax_barra.tick_params(axis='x', rotation=45, labelsize=7)
 
-        ax_barra.legend(fontsize=6)
+        ax_barra.legend(fontsize=4)
 
         st.pyplot(fig_barra)
     # ======================================================
