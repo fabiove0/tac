@@ -434,9 +434,9 @@ else:
     cores_do_grafico = [mapa_cores.get(status.upper(), "#D3D3D3") for status in contagem.index]
     
 
-    col1, col2 = st.columns([1, 1])
+    col1, col2 = st.columns([2, 1])
     with col1:
-        fig, ax = plt.subplots(figsize=(3, 3))
+        fig, ax = plt.subplots(figsize=(2, 2))
         ax.pie(
             contagem.values, 
             labels=contagem.index, 
@@ -447,7 +447,7 @@ else:
         )
         st.pyplot(fig)
     with col2:
-        fig_barra, ax_barra = plt.subplots(figsize=(6, 3))
+        fig_barra, ax_barra = plt.subplots(figsize=(5, 2))
     
         bottom = None
     
@@ -472,7 +472,7 @@ else:
                             int(valor),
                             ha="center",
                             va="center",
-                            fontsize=3,
+                            fontsize=4,
                             color="black",
                             fontweight="bold"
                         )
