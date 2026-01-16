@@ -443,19 +443,22 @@ else:
         st.pyplot(fig)
     with col2:
         fig_barra, ax_barra = plt.subplots(figsize=(6, 3))
+    
+        bottom = None
 
         for status, cor in mapa_cores.items():
-            dados = contagem_tac_status[contagem_tac_status["STATUS"] == status]
-            ax_barra.bar(
-                dados["DOCUMENTO"],
-                dados["TOTAL"],
-                label=status,
-                color=cor,
-                bottom=contagem_tac_status[
-                    contagem_tac_status["STATUS"] < status
-                ]["TOTAL"].groupby(contagem_tac_status["DOCUMENTO"]).sum()
-                if status != contagem_tac_status["STATUS"].unique()[0] else None
-            )
+            if status in tabela_pivot.columns:
+                valores = tabela_pivot[status]
+    
+                ax_barra.bar(
+                    tabela_pivot.index,
+                    valores,
+                    bottom=bottom,
+                    label=status,
+                    color=cor
+                )
+    
+                bottom = valores if bottom is None else bottom + valores
     
         ax_barra.set_xlabel("TAC")
         ax_barra.set_ylabel("Quantidade de Status")
@@ -463,7 +466,7 @@ else:
         ax_barra.tick_params(axis='x', rotation=45, labelsize=7)
         ax_barra.legend(fontsize=6)
 
-    st.pyplot(fig_barra)
+st.pyplot(fig_barra)
     # ======================================================
     # TABELA FINAL (APP)
     # ======================================================
