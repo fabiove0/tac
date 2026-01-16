@@ -377,6 +377,31 @@ else:
     # ======================================================
     # GRÁFICO
     # ======================================================
+    df_grafico = tabela_para_exibir.melt(
+    id_vars=["DOCUMENTO"],
+    value_vars=[
+        "STATUS_DA_CLAUSULA",
+        "STATUS_DO_INCISO",
+        "STATUS_DA_ALINEA"
+    ],
+    var_name="TIPO",
+    value_name="STATUS"
+    )
+
+    df_grafico = df_grafico[
+        (df_grafico["STATUS"] != "") &
+        (df_grafico["STATUS"] != "NÃO SE APLICA")
+    ]
+    
+    df_grafico["STATUS"] = df_grafico["STATUS"].str.upper()
+    
+    contagem_tac_status = (
+    df_grafico
+    .groupby(["DOCUMENTO", "STATUS"])
+    .size()
+    .reset_index(name="TOTAL")
+    )
+    
     mapa_cores = {
     "CONCLUÍDO": "#C6EFCE", 
     "CUMPRIDO": "#C6EFCE",
@@ -404,8 +429,8 @@ else:
     cores_do_grafico = [mapa_cores.get(status.upper(), "#D3D3D3") for status in contagem.index]
 
 
-    _, col_centro, _ = st.columns([1, 1, 1])
-    with col_centro:
+    col1, col2 = st.columns([1, 2])
+    with col1:
         fig, ax = plt.subplots(figsize=(3, 3))
         ax.pie(
             contagem.values, 
@@ -416,7 +441,29 @@ else:
             colors=cores_do_grafico  
         )
         st.pyplot(fig)
+     with col2:
+        fig_barra, ax_barra = plt.subplots(figsize=(6, 3))
 
+    for status, cor in mapa_cores.items():
+        dados = contagem_tac_status[contagem_tac_status["STATUS"] == status]
+        ax_barra.bar(
+            dados["DOCUMENTO"],
+            dados["TOTAL"],
+            label=status,
+            color=cor,
+            bottom=contagem_tac_status[
+                contagem_tac_status["STATUS"] < status
+            ]["TOTAL"].groupby(contagem_tac_status["DOCUMENTO"]).sum()
+            if status != contagem_tac_status["STATUS"].unique()[0] else None
+        )
+
+    ax_barra.set_xlabel("TAC")
+    ax_barra.set_ylabel("Quantidade de Status")
+    ax_barra.set_title("Distribuição de Status por TAC")
+    ax_barra.tick_params(axis='x', rotation=45, labelsize=7)
+    ax_barra.legend(fontsize=6)
+
+    st.pyplot(fig_barra)
     # ======================================================
     # TABELA FINAL (APP)
     # ======================================================
