@@ -447,7 +447,7 @@ else:
         )
         st.pyplot(fig)
     with col2:
-        fig_barra, ax_barra = plt.subplots(figsize=(5, 2))
+        fig_barra, ax_barra = plt.subplots(figsize=(4, 1))
     
         bottom = None
     
@@ -484,9 +484,9 @@ else:
         ax_barra.set_xlabel("")             # remove título eixo X
         ax_barra.set_ylabel("")             # remove título eixo Y
         ax_barra.set_yticks([])
-        ax_barra.tick_params(axis='x', rotation=45, labelsize=7)
+        ax_barra.tick_params(axis='x', rotation=45, labelsize=6)
 
-        ax_barra.legend(fontsize=4)
+        ax_barra.legend(fontsize=3)
 
         st.pyplot(fig_barra)
     # ======================================================
