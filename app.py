@@ -447,25 +447,45 @@ else:
         )
         st.pyplot(fig)
     with col2:
-        fig_barra, ax_barra = plt.subplots(figsize=(6, 3))
+        fig_barra, ax_barra = plt.subplots(figsize=(4, 1))
     
         bottom = None
-
+    
         for status, cor in mapa_cores.items():
             if status in tabela_pivot.columns:
                 valores = tabela_pivot[status]
     
-                ax_barra.bar(
+                barras = ax_barra.bar(
                     tabela_pivot.index,
                     valores,
                     bottom=bottom,
-                    label=status,
                     color=cor
                 )
+    
+                # ESCREVER NÚMEROS DENTRO DAS BARRAS
+                for i, valor in enumerate(valores):
+                    if valor > 0:
+                        y_pos = valor / 2 if bottom is None else bottom[i] + valor / 2
+                        ax_barra.text(
+                            i,
+                            y_pos,
+                            int(valor),
+                            ha="center",
+                            va="center",
+                            fontsize=7,
+                            color="black",
+                            fontweight="bold"
+                        )
     
                 bottom = valores if bottom is None else bottom + valores
     
         ax_barra.set_title("Distribuição de Status por TAC")
+        ax_barra.legend().remove()          # remove legenda
+        ax_barra.set_xlabel("")             # remove título eixo X
+        ax_barra.set_ylabel("")             # remove título eixo Y
+        ax_barra.set_yticks([])
+        ax_barra.tick_params(axis='x', rotation=45, labelsize=7)
+
         ax_barra.legend(fontsize=6)
 
         st.pyplot(fig_barra)
