@@ -463,7 +463,7 @@ else:
                 )
     
                 # ESCREVER NÚMEROS DENTRO DAS BARRAS
-               for i, valor in enumerate(valores):
+            for i, valor in enumerate(valores):
                 if valor > 0:
                     y_pos = valor / 2 if bottom is None else bottom[i] + valor / 2
                     ax_barra.text(
