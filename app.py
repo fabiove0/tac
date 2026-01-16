@@ -436,13 +436,13 @@ else:
 
     col1, col2 = st.columns([2, 2])
     with col1:
-        fig, ax = plt.subplots(figsize=(2, 2))
+        fig, ax = plt.subplots(figsize=(3, 3))
         ax.pie(
             contagem.values, 
             labels=contagem.index, 
             autopct=fazer_rotulo, 
             startangle=140, 
-            textprops={'fontsize': 4},
+            textprops={'fontsize': 3},
             colors=cores_do_grafico  
         )
         st.pyplot(fig)
