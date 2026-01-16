@@ -465,8 +465,6 @@ else:
     
                 bottom = valores if bottom is None else bottom + valores
     
-        ax_barra.set_xlabel("TAC")
-        ax_barra.set_ylabel("Quantidade de Status")
         ax_barra.set_title("Distribuição de Status por TAC")
         ax_barra.tick_params(axis='x', rotation=45, labelsize=7)
         ax_barra.legend(fontsize=6)
