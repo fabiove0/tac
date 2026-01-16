@@ -447,7 +447,7 @@ else:
         )
         st.pyplot(fig)
     with col2:
-        fig_barra, ax_barra = plt.subplots(figsize=(4, 1))
+        fig_barra, ax_barra = plt.subplots(figsize=(4, 2))
     
         bottom = None
     
@@ -463,22 +463,21 @@ else:
                 )
     
                 # ESCREVER NÚMEROS DENTRO DAS BARRAS
-                for i, valor in enumerate(valores):
-                    if valor > 0:
-                        y_pos = valor if bottom is None else bottom[i] + valor
-                
-                        ax_barra.text(
-                            i,
-                            y_pos + 0.3,   # deslocamento para cima (ajustável)
-                            int(valor),
-                            ha="center",
-                            va="bottom",
-                            fontsize=3,
-                            color="black",
-                            fontweight="bold"
-                        )
-    
-                bottom = valores if bottom is None else bottom + valores
+               for i, valor in enumerate(valores):
+                if valor > 0:
+                    y_pos = valor / 2 if bottom is None else bottom[i] + valor / 2
+                    ax_barra.text(
+                        i,
+                        y_pos,
+                        int(valor),
+                        ha="center",
+                        va="center",
+                        fontsize=3,
+                        color="black",
+                        fontweight="bold"
+                    )
+
+            bottom = valores if bottom is None else bottom + valores
     
         ax_barra.set_title("Distribuição de Status por TAC", fontsize=7)
         ax_barra.legend().remove()          # remove legenda
