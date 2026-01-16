@@ -465,26 +465,27 @@ else:
                 # ESCREVER NÚMEROS DENTRO DAS BARRAS
                 for i, valor in enumerate(valores):
                     if valor > 0:
-                        y_pos = valor / 2 if bottom is None else bottom[i] + valor / 2
+                        y_pos = valor if bottom is None else bottom[i] + valor
+                
                         ax_barra.text(
                             i,
-                            y_pos,
+                            y_pos + 0.3,   # deslocamento para cima (ajustável)
                             int(valor),
                             ha="center",
-                            va="center",
-                            fontsize=4,
+                            va="bottom",
+                            fontsize=8,
                             color="black",
                             fontweight="bold"
                         )
     
                 bottom = valores if bottom is None else bottom + valores
     
-        ax_barra.set_title("Distribuição de Status por TAC")
+        ax_barra.set_title("Distribuição de Status por TAC", fontsize=7)
         ax_barra.legend().remove()          # remove legenda
         ax_barra.set_xlabel("")             # remove título eixo X
         ax_barra.set_ylabel("")             # remove título eixo Y
         ax_barra.set_yticks([])
-        ax_barra.tick_params(axis='x', rotation=45, labelsize=3)
+        ax_barra.tick_params(axis='x', rotation=45, labelsize=4)
 
         ax_barra.legend(fontsize=3)
 
