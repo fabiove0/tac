@@ -436,7 +436,7 @@ else:
 
     col1, col2 = st.columns([2, 2])
     with col1:
-        fig, ax = plt.subplots(figsize=(3, 3))
+        fig, ax = plt.subplots(figsize=(1, 1))
         ax.pie(
             contagem.values, 
             labels=contagem.index, 
