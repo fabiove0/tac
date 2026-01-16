@@ -434,7 +434,7 @@ else:
     cores_do_grafico = [mapa_cores.get(status.upper(), "#D3D3D3") for status in contagem.index]
     
 
-    col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([1, 2])
     with col1:
         fig, ax = plt.subplots(figsize=(2, 2))
         ax.pie(
