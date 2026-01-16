@@ -442,7 +442,7 @@ else:
             labels=contagem.index, 
             autopct=fazer_rotulo, 
             startangle=140, 
-            textprops={'fontsize': 6},
+            textprops={'fontsize': 4},
             colors=cores_do_grafico  
         )
         st.pyplot(fig)
@@ -472,7 +472,7 @@ else:
                             int(valor),
                             ha="center",
                             va="center",
-                            fontsize=3,
+                            fontsize=4,
                             color="black",
                             fontweight="bold"
                         )
@@ -484,7 +484,7 @@ else:
         ax_barra.set_xlabel("")             # remove título eixo X
         ax_barra.set_ylabel("")             # remove título eixo Y
         ax_barra.set_yticks([])
-        ax_barra.tick_params(axis='x', rotation=45, labelsize=3)
+        ax_barra.tick_params(axis='x', rotation=45, labelsize=4)
 
         ax_barra.legend(fontsize=3)
 
