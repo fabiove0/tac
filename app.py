@@ -447,7 +447,7 @@ else:
         )
         st.pyplot(fig)
     with col2:
-        fig_barra, ax_barra = plt.subplots(figsize=(4, 3))
+        fig_barra, ax_barra = plt.subplots(figsize=(2, 1))
     
         bottom = None
     
@@ -479,7 +479,7 @@ else:
 
                 bottom = valores if bottom is None else bottom + valores
     
-        ax_barra.set_title("Distribuição de Status por TAC", fontsize=7)
+        ax_barra.set_title("Distribuição de Status por TAC", fontsize=6)
         ax_barra.legend().remove()          # remove legenda
         ax_barra.set_xlabel("")             # remove título eixo X
         ax_barra.set_ylabel("")             # remove título eixo Y
