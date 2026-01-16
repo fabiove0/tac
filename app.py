@@ -466,7 +466,7 @@ else:
         ax_barra.tick_params(axis='x', rotation=45, labelsize=7)
         ax_barra.legend(fontsize=6)
 
-st.pyplot(fig_barra)
+        st.pyplot(fig_barra)
     # ======================================================
     # TABELA FINAL (APP)
     # ======================================================
