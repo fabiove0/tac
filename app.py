@@ -447,7 +447,7 @@ else:
         )
         st.pyplot(fig)
     with col2:
-        fig_barra, ax_barra = plt.subplots(figsize=(2, 1))
+        fig_barra, ax_barra = plt.subplots(figsize=(5, 4))
     
         bottom = None
     
