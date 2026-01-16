@@ -473,7 +473,7 @@ else:
                             int(valor),
                             ha="center",
                             va="bottom",
-                            fontsize=8,
+                            fontsize=3,
                             color="black",
                             fontweight="bold"
                         )
