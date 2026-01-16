@@ -401,6 +401,11 @@ else:
     .size()
     .reset_index(name="TOTAL")
     )
+    tabela_pivot = (
+    contagem_tac_status
+    .pivot(index="DOCUMENTO", columns="STATUS", values="TOTAL")
+    .fillna(0)
+    )
     
     mapa_cores = {
     "CONCLUÍDO": "#C6EFCE", 
@@ -427,7 +432,7 @@ else:
     total_geral = len(lista_final)
 
     cores_do_grafico = [mapa_cores.get(status.upper(), "#D3D3D3") for status in contagem.index]
-
+    
 
     col1, col2 = st.columns([1, 2])
     with col1:
