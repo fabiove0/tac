@@ -23,7 +23,11 @@ url = (
     "pub?gid=0&single=true&output=csv"
 )
 
-df = pd.read_csv(url)
+try:
+    df = pd.read_csv(url)
+except Exception:
+    st.error("Erro ao carregar os dados.")
+    st.stop()
 df_tratado = df.fillna('')
 
 
@@ -77,8 +81,7 @@ def converter_imagem_para_base64(caminho_da_imagem):
 # ==========================================================
 # TRATAMENTO DOS DADOS
 # ==========================================================
-df_tratado = df_tratado.applymap(normalizar_texto)
-
+df_tratado = df_tratado.apply(lambda col: col.map(normalizar_texto))
 
 # ==========================================================
 # MAPA DE NOMES AMIGÁVEIS (APENAS VISUAL)
@@ -171,7 +174,7 @@ else:
         if col in tabela_visual_estilizada.columns:
             tabela_visual_estilizada[col] = tabela_visual_estilizada[col].apply(estilizar_status)
     
-    colunas_index = list(mapa_titulos.keys())
+    colunas_index = list(a_titulos.keys())
     
     # Criamos a tabela_visual (esta sim terá os 14 índices)
     tabela_visual = tabela_visual_estilizada.set_index(colunas_index)
@@ -436,7 +439,7 @@ else:
 
     col1, col2 = st.columns([2, 2])
     with col1:
-        fig, ax = plt.subplots(figsize=(2, 2))
+        fig, ax = plt.subplots(figsize=(4, 4))
         ax.pie(
             contagem.values, 
             labels=contagem.index, 
@@ -493,7 +496,7 @@ else:
     # TABELA FINAL (APP)
     # ======================================================
     st.write("### 📋 Relatório")
-
+    st.caption(f"Exibindo {len(tabela_para_exibir)} registros")
     st.markdown(
         tabela_visual.to_html(
             escape=False,
