@@ -380,6 +380,16 @@ else:
     # ======================================================
     # GRÁFICO
     # ======================================================
+    ordem_tacs = [
+    "TAC Original 2018",
+    "TAC ORIGINAL 2020",
+    "TAC 1º TERMO ADITIVO ",
+    "TAC 2º TERMO ADITIVO ",
+    "TAC 3º TERMO ADITIVO ",
+    "ADITIVO DO 3º ADITIVO ",
+    "TAC 4º TERMO ADITIVO ",
+    "TAC 5º TERMO ADITIVO "
+]
     df_grafico = tabela_para_exibir.melt(
     id_vars=["DOCUMENTO"],
     value_vars=[
@@ -409,7 +419,8 @@ else:
     .pivot(index="DOCUMENTO", columns="STATUS", values="TOTAL")
     .fillna(0)
     )
-    
+    ordem_existente = [x for x in ordem_tacs if x in tabela_pivot.index]
+    tabela_pivot = tabela_pivot.reindex(ordem_existente)
     mapa_cores = {
     "CONCLUÍDO": "#C6EFCE", 
     "CUMPRIDO": "#C6EFCE",
