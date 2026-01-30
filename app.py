@@ -383,12 +383,12 @@ else:
     ordem_tacs = [
     "TAC Original 2018",
     "TAC ORIGINAL 2020",
-    "TAC 1º TERMO ADITIVO ",
-    "TAC 2º TERMO ADITIVO ",
-    "TAC 3º TERMO ADITIVO ",
-    "ADITIVO DO 3º ADITIVO ",
-    "TAC 4º TERMO ADITIVO ",
-    "TAC 5º TERMO ADITIVO "
+    "TAC 1º TERMO ADITIVO",
+    "TAC 2º TERMO ADITIVO",
+    "TAC 3º TERMO ADITIVO",
+    "ADITIVO DO 3º ADITIVO",
+    "TAC 4º TERMO ADITIVO",
+    "TAC 5º TERMO ADITIVO"
 ]
     df_grafico = tabela_para_exibir.melt(
     id_vars=["DOCUMENTO"],
