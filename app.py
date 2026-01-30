@@ -12,7 +12,8 @@ import base64
 # ==========================================================
 st.set_page_config(page_title="Monitoramento de TACs", layout="wide")
 if st.button("🔍 Buscar termo na página"):
-    st.toast("Use Ctrl + F para buscar um termo na página", icon="🔎")st.title("Painel de Monitoramento de TACs")
+    st.toast("Use Ctrl + F para buscar um termo na página", icon="🔎")
+st.title("Painel de Monitoramento de TACs")
 
 
 # ==========================================================
