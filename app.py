@@ -419,8 +419,8 @@ else:
     .pivot(index="DOCUMENTO", columns="STATUS", values="TOTAL")
     .fillna(0)
     )
-    ordem_existente = [x for x in ordem_tacs if x in tabela_pivot.index]
-    tabela_pivot = tabela_pivot.reindex(ordem_existente)
+    tabela_pivot = tabela_pivot.reindex(ordem_tacs)
+    
     mapa_cores = {
     "CONCLUÍDO": "#C6EFCE", 
     "CUMPRIDO": "#C6EFCE",
