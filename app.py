@@ -11,6 +11,7 @@ import base64
 # CONFIGURAÇÃO DA PÁGINA
 # ==========================================================
 st.set_page_config(page_title="Monitoramento de TACs", layout="wide")
+st.info("🔎 Para buscar um termo na página, pressione **Ctrl + F** (ou **Cmd + F** no Mac)")
 st.title("Painel de Monitoramento de TACs")
 
 
