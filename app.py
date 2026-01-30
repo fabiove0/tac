@@ -174,7 +174,7 @@ else:
         if col in tabela_visual_estilizada.columns:
             tabela_visual_estilizada[col] = tabela_visual_estilizada[col].apply(estilizar_status)
     
-    colunas_index = list(a_titulos.keys())
+    colunas_index = list(mapa_titulos.keys())
     
     # Criamos a tabela_visual (esta sim terá os 14 índices)
     tabela_visual = tabela_visual_estilizada.set_index(colunas_index)
