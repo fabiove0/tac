@@ -12,7 +12,7 @@ import base64
 # ==========================================================
 st.set_page_config(page_title="Monitoramento de TACs", layout="wide")
 if st.button("🔍 Buscar termo na página"):
-    st.toast("Use Ctrl + F para buscar um termo na página", icon="🔎")
+    st.toast("Para buscar um termo na página, pressione **Ctrl + F** (ou **Cmd + F** no Mac)", icon="🔎")
 st.title("Painel de Monitoramento de TACs")
 
 
@@ -134,8 +134,10 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 
-termo_busca = st.text_input("🔍 Filtrar tabela por termo:", "")
-
+termo_busca = st.text_input(
+    "🔎 Filtrar relatório por termo",
+    help="Exibe apenas as linhas que contêm o termo digitado. Ideal para gerar relatórios personalizados."
+)
 
 # ==========================================================
 # LÓGICA DE FILTRAGEM
